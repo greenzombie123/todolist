@@ -1,4 +1,4 @@
-class Task {
+export class Task {
     constructor(name, descript, date, project, tags, priority) {
       this.name = name;
       this.descript = descript;
@@ -6,21 +6,6 @@ class Task {
       this.project = project || "Inbox";
       this.tags = tags || [];
       this.priority = priority || 1;
+      this.id;
     }
   }
-  
-  class Tag {
-    constructor(name, color) {
-      this.name = name;
-      this.color = color;
-    }
-  }
-  
-  class Project {
-    constructor(name) {
-      this.name = name;
-      this.tasks = [];
-    }
-  }
-
-  //T Initial Page
