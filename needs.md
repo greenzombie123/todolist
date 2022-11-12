@@ -1,3 +1,9 @@
+# User Interface Functions
+- All the functionality of the app is abstracted into a number of functions. SImplifies what the user has to do to use the use the app
+
+# State Management
+- Certain actions will be restricted depending on the state of the app
+
 # You can create tasks
 - Press a button to open task creation modal
 - Interact with selectors
@@ -19,6 +25,10 @@
     - Edit, Push Button to make change, Rerender
     - Press tag, priorty, and folder
     - Edit (Choose on or multiple parameters), Make Change, Rerender
+
+# Folder Management
+  - Holds all folders
+  - Gives ref of all folders
 
 # You can create a folder
 - Press Folder Link
@@ -52,20 +62,13 @@
 - Rerender
 ## There is a interface for folder creation, folder deletion, folder switching and folder editing
 
-# Folder Creation
-## When creating a folder, you can write its name
-## When creating a folder, you can choose the color of its text
-- Click on Folder Link
-- Interact with Folder Creation
-- Create a name
-- Choose a color
-- Press Create Buton
-- Folder is created and a link is placed in the side menu
+
 # Folders hold tasks
 - When a task is created, it is placed in folder
 - [Tasks in deleted folder are moved to **Inbox**](#you-can-create-a-folder) 
 - Task can change folder through editing (Pressing the folder link on taskbar)
-# There are three  default folders called 'Inbox' "Finished" and "Overdue"
+
+# There are three  default folders called 'Inbox' and "Finished"
 ## Created tasks are immediately placed in a specified folder or Inbox folder
 ## You can view all the names of folders
 - Press Folder Link
@@ -123,7 +126,8 @@
 3. Click on button to create task
 4. Priority is added to task 
 5. When a task is not given a priority level, it is given a level of one.
-- Task Bar are rendered with an border color depending on their level, with level 1 taskbars rendered with a thick red outline
+
+# Task Bar are rendered with an border color depending on their level, with level 1 taskbars rendered with a thick red outline
 
 # You can change priority of a task
 1. CLick on priority symbol to open **Priority Change Interface**
@@ -184,7 +188,7 @@
 3. Create description
 4. CLick edit to change 
 5. Rerender
- 
+
 # Tasks are viewed as task bars on the task viwewer section
 - Taskbars have the task's name, description, date, priority level, folder, and tags in display 
 - When page is loaded, tasks in the Inbox folder are rendered and the word Inbox is displayed up top 
