@@ -161,10 +161,16 @@ class FolderManager {
     this.inbox.tasks.push(
       new Task("Do laundry", null, new Date(2022, 11, 15), null, 1, [
         new Tag("Work", "green"),
+        new Tag("School", "yellow"),
       ]),
-      new Task("Pay bills", null, new Date(2022, 11, 16), "Inbox", 3, [
-        new Tag("Work", "green"),
-      ])
+      new Task(
+        "Pay bills",
+        "Go to Walgreens",
+        new Date(2022, 11, 16),
+        "Inbox",
+        3,
+        [new Tag("Work", "green")]
+      )
     );
     this.folders.push(new Folder("Private", "green"));
   }
@@ -615,14 +621,15 @@ export const TaskCreate = (function () {
   const fm = folderManager;
   const tm = tagManager;
 
-  const setName = (name)=> createTask.setName(name) 
-  const setDescript = (descript)=>createTask.setDescript(descript) 
-  const setDate = (d, h, mi, p, mo, y)=>createTask.setDate(d, h, mi, p, mo, y) 
-  const setPriority = (number)=>createTask.setPriority(number) 
-  const setFolder = (name)=>createTask.setFolder(name, fm) 
-  const setTag = (name)=>createTask.setTag(name, tm) 
+  const setName = (name) => createTask.setName(name);
+  const setDescript = (descript) => createTask.setDescript(descript);
+  const setDate = (d, h, mi, p, mo, y) =>
+    createTask.setDate(d, h, mi, p, mo, y);
+  const setPriority = (number) => createTask.setPriority(number);
+  const setFolder = (name) => createTask.setFolder(name, fm);
+  const setTag = (name) => createTask.setTag(name, tm);
 
-  return {setName, setDescript, setDate, setPriority, setFolder, setTag}
+  return { setName, setDescript, setDate, setPriority, setFolder, setTag };
 })();
 export const SeeTasks = (function () {
   const fm = folderManager;
@@ -714,22 +721,35 @@ export const TagActions = (function () {
 
   return { makeNewTag, editATag, deleteATag };
 })();
-const edit = (function(){
+const edit = (function () {
   const fm = folderManager;
   const tm = tagManager;
   const tv = taskViewer;
 
-  const editTaskName = (name, newName) => editor.editName(name, newName, tv)
-  const editTaskDescript = (name, newDescript) => editor.editDescript(name, newDescript, tv)
-  const addNewTags = (taskName, tagNames) => editor.addTags(taskName, tagNames, tv, tm)
-  const removeSomeTags = (taskName, tagNames) => editor.removeTags(taskName, tagNames, tv, tm) 
-  const editTaskDate = (taskName, day, hours, minutes, period, month, year) => editor.editDate(taskName, tv, day, hours, minutes, period, month, year)
-  const editTaskPriority = (taskName, number) => editor.editPriority(taskName, tv, number)
-  const changeFolder = (taskName, newFolder) => editor.changeFolder(taskName, newFolder, tv, fm) 
-  
-  return {editTaskName, editTaskDescript, addNewTags, removeSomeTags, editTaskDate, editTaskPriority, changeFolder}
+  const editTaskName = (name, newName) => editor.editName(name, newName, tv);
+  const editTaskDescript = (name, newDescript) =>
+    editor.editDescript(name, newDescript, tv);
+  const addNewTags = (taskName, tagNames) =>
+    editor.addTags(taskName, tagNames, tv, tm);
+  const removeSomeTags = (taskName, tagNames) =>
+    editor.removeTags(taskName, tagNames, tv, tm);
+  const editTaskDate = (taskName, day, hours, minutes, period, month, year) =>
+    editor.editDate(taskName, tv, day, hours, minutes, period, month, year);
+  const editTaskPriority = (taskName, number) =>
+    editor.editPriority(taskName, tv, number);
+  const changeFolder = (taskName, newFolder) =>
+    editor.changeFolder(taskName, newFolder, tv, fm);
 
-})()
+  return {
+    editTaskName,
+    editTaskDescript,
+    addNewTags,
+    removeSomeTags,
+    editTaskDate,
+    editTaskPriority,
+    changeFolder,
+  };
+})();
 //export { createTask as CreateTask };
 export { edit as Editor };
 export { folderManager, taskViewer, tagManager, colorManager };
