@@ -296,6 +296,7 @@
 
 .task-create::backdrop {
   background-color: transparent;
+  z-index: 2;
 }
 
 .task-create__form {
@@ -341,35 +342,45 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 1.5rem auto;
-  row-gap: 0.1rem;
-  margin-bottom: 1.5rem;
+  row-gap: 0.4rem;
+  margin-bottom: 10px;
+  justify-items: flex-start;
+  align-items: flex-start;
 }
-.task-create__date-label {
-  color: black;
+.task-create__date-button {
+  border: 1px solid rgba(0, 0, 0, 0.314);
+  border-radius: 5px;
+  text-align: left;
   font-size: 1rem;
+  width: fit-content;
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+}
+
+.task-create__date-button:hover{
+  background-color: rgba(135, 137, 138, 0.475);
 }
 
 .task-create__date {
-  border: none;
-  text-align: left;
-  font-size: .9rem;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.task-create__date:hover{
-  background-color: yellow;
+  font-size: 1rem;
 }
 
 .task-create__date-container {
   display: grid;
-  display: none;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
   align-items: center;
 
   height: 7rem;
   width: 30vw;
+  z-index: 2;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.task-create__date-container--hidden{
+  display: none;
 }
 
 .task-create__date-container__date-label {
@@ -385,43 +396,73 @@
 .task-create__date-container__time-input {
 }
 
-.task-create__tag-label {
-  color: black;
+.task-create__tag-button {
+  border: 1px solid rgba(0, 0, 0, 0.314);
+  border-radius: 5px;
+  text-align: left;
   font-size: 1rem;
+  width: fit-content;
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+}
+
+.task-create__tag-button:hover{
+  background-color: rgba(135, 137, 138, 0.475);
 }
 
 .task-create__tagcontainer {
-  position: relative;
-  cursor: pointer;
   width: fit-content;
-}
-
-.task-create__tagcontainer:hover{
-  outline: solid;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .task-create__tag {
-  vertical-align: sub;
+  font-size: 1rem;
+  margin: 2px 5px;
 }
 
-.task-create__taglist-container {
-  position: absolute;
-  top: 0rem;
-  right: 63px;
-  width: 10rem;
+.task-create__tag--red {
+  border: 3px solid red;
+}
+.task-create__tag--blue {
+  border: 3px solid blue;
+}
+.task-create__tag--green {
+  border: 3px solid green;
+}
+.task-create__tag--yellow {
+  border: 3px solid yellow;
+}
+.task-create__tag--orange {
+  border: 3px solid orange;
+}
+.task-create__tag--pink {
+  border: 3px solid pink;
+}
+.task-create__tag--purple {
+  border: 3px solidpurple;
+}
+.task-create__tag--black {
+  border: 3px solid black;
+}
+
+
+.task-create__taglist {
+  position: fixed;
+  width: 15rem;
   min-height: 3rem;
   padding: 4px;
   padding-top: 0.8rem;
+  padding-right: 1rem;
   border: 1px solid;
   background-color: white;
   border-radius: 6px;
+  z-index: 2;
 }
 
-.task-create__taglist-container--hidden {
+.task-create__taglist--hidden{
   display: none;
-}
-
-.task-create__taglist {
 }
 
 .task-create__tag-listitem {
@@ -429,6 +470,8 @@
   display: flex;
   justify-content: space-between;
   padding-left: 1.5rem;
+  align-items: center;
+  margin: .5rem 0;
 }
 
 .task-create__tag-listitem--red::before {
@@ -465,33 +508,76 @@
 }
 
 .task-create__tagname {
+  font-size: 1.5rem;
 }
 .task-create__tag-checkbox {
+  width: 1rem;
+  height: 1rem;
 }
 
-.task-create__priority-label {
-  color: black;
+.task-create__priority-button {
+  border: 1px solid rgba(0, 0, 0, 0.314);
+  border-radius: 5px;
+  text-align: left;
   font-size: 1rem;
+  width: fit-content;
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+}
+
+.task-create__priority-button:hover{
+  background-color: rgba(135, 137, 138, 0.475);
 }
 
 .task-create__priority {
-}
-.task-create__priority-selection {
-  width: 3rem;
-  height: 1.6rem;
   font-size: 1rem;
 }
-.task-create__priorityoption {
+.task-create__priority-selection {
+  /* position: fixed; */
+  width: 10rem;
+  height: 2rem;
+  font-size: 1rem;
+  z-index: 2;
 }
-.task-create__folder-label {
-  color: black;
+
+.task-create__priority-selection--hidden{
+  display: none;
+}
+
+.task-create__priorityoption {
+
+}
+
+.task-create__folder-button {
+  border: 1px solid rgba(0, 0, 0, 0.314);
+  border-radius: 5px;
+  text-align: left;
+  font-size: 1rem;
+  width: fit-content;
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+}
+
+.task-create__folder-button:hover{
+  background-color: rgba(135, 137, 138, 0.475);
+}
+
+.task-create__folder{
   font-size: 1rem;
 }
 
 .task-create__folder-selection {
+  /* position: fixed; */
   width: 8rem;
   height: 1.6rem;
   font-size: 1rem;
+  z-index: 2;
+}
+
+.task-create__folder-selection--hidden{
+  display: none;
 }
 
 .task-create__folderoption {
@@ -502,6 +588,8 @@
   height: 1.5rem;
   align-self: flex-end;
 }
+
+.poppers{}
 
 /*Edit Date*/
 

@@ -58,7 +58,7 @@ class CreateTask {
 
   setDate(
     day = null,
-    hours = 23,
+    hours = 11,
     minutes = 59,
     period = "pm",
     month = null,
@@ -114,6 +114,11 @@ class CreateTask {
   getTags() {
     return this.tags;
   }
+  getTag(tagname){
+    const hasTag = this.tags.some((tag) => tagname === tag.name);
+    const tag = this.tags.find((tag) => tag.name === tagname);
+    if(hasTag)return tag ? tag : false
+  }
   getName() {
     return this.name;
   }
@@ -122,6 +127,14 @@ class CreateTask {
   }
   getDate() {
     return this.date;
+  }
+
+  removeTag(tagname) {
+    const hasTag = this.tags.some((tag) => tagname === tag.name);
+    if (hasTag) {
+      _.remove(this.tags, (tag) => tagname === tag.name);
+      console.log(this.tags);
+    }
   }
 
   reset = () => {
@@ -172,7 +185,7 @@ class FolderManager {
         [new Tag("Work", "green")]
       )
     );
-    this.folders.push(new Folder("Private", "green"));
+    this.folders.push(new Folder("Private", "green"), new Folder("Hobby", "purple"));
   }
   //Place in folder
   insertTaskToFolder = (task) => {
@@ -628,8 +641,21 @@ export const TaskCreate = (function () {
   const setPriority = (number) => createTask.setPriority(number);
   const setFolder = (name) => createTask.setFolder(name, fm);
   const setTag = (name) => createTask.setTag(name, tm);
+  const removeTag = (name) => createTask.removeTag(name);
+  const getTag = (tagname) => createTask.getTag(tagname);
+  const getTags = ()=> createTask.getTags()
 
-  return { setName, setDescript, setDate, setPriority, setFolder, setTag };
+  return {
+    setName,
+    setDescript,
+    setDate,
+    setPriority,
+    setFolder,
+    setTag,
+    removeTag,
+    getTag,
+    getTags
+  };
 })();
 export const SeeTasks = (function () {
   const fm = folderManager;
