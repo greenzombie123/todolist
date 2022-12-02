@@ -158,18 +158,6 @@ function checkName(name) {
   return hasName;
 }
 
-function formatDate(date, time) {
-  const day = parseInt(date.slice(8)) || null;
-  const hours = parseInt(time.slice(0, 3)) || undefined;
-  const minutes = parseInt(time.slice(3)) || undefined;
-  const period = !hours ? undefined : parseInt(hours) > 11 ? "pm" : "am";
-  const month = parseInt(date.slice(5, 7)) || null;
-  const year = parseInt(date.slice(0, 4)) || null;
-
-  console.log([day, hours, minutes, period, month, year]);
-  return [day, hours, minutes, period, month, year];
-}
-
 //* Task Create
 
 
@@ -445,8 +433,8 @@ function setFolder(e) {
 
 const dateInput = document.querySelector(".task-create__date-input");
 const timeInput = document.querySelector(".task-create__time-input");
-dateInput.addEventListener("change", setDateOnTaskCreate);
-timeInput.addEventListener("change", setDateOnTaskCreate);
+dateInput.addEventListener("change", setDate);
+timeInput.addEventListener("change", setDate);
 
 const datebutton = document.querySelector(".task-create__date-button");
 datebutton.addEventListener("click", openDateContainer);
@@ -477,17 +465,14 @@ function setDate() {
   const timeInput = document.querySelector(".task-create__time-input");
   const deadline = formatDate(dateInput.value, timeInput.value);
   TaskCreate.setDate(...deadline);
+  setDateOnTaskCreate()
 }
 
 function setDateOnTaskCreate() {
   const datelabel = document.querySelector(".task-create__date");
-  const dateInput = document.querySelector(".task-create__date-input");
-  const timeInput = document.querySelector(".task-create__time-input");
-  const datevalues = dateInput.value;
-  const timevalues = timeInput.value;
-  const date = createDate(datevalues, timevalues);
+  const date = TaskCreate.getDate()
   const today = new Date();
-  // console.log(today);
+  console.log(date);
   if (date.getDay() === today.getDay()) {
     datelabel.textContent = format(
       date,
@@ -501,7 +486,6 @@ function setDateOnTaskCreate() {
       }`
     );
   }
-  setDate();
 }
 
 function revealDateContainer() {
@@ -514,20 +498,15 @@ function hideDateContainer() {
   closeOverlay();
 }
 
-function createDate(date, time) {
-  console.log({ date, time });
-  const deadline = new Date();
-  deadline.setDate(parseInt(date.slice(8)) || deadline.getDay());
-  deadline.setHours(parseInt(time.slice(0, 3)) || 23);
-  deadline.setMinutes(parseInt(time.slice(3)) || 59);
-  deadline.setMonth(
-    parseInt(date.slice(5, 7) ? date.slice(5, 7) - 1 : "") ||
-      deadline.getMonth()
-  );
-  // console.log(date.slice(5, 7));
-  deadline.setFullYear(parseInt(date.slice(0, 4)) || deadline.getFullYear());
+function formatDate(date, time) {
+  const day = parseInt(date.slice(8)) || null;
+  const hours = parseInt(time.slice(0, 3)) || undefined;
+  const minutes = parseInt(time.slice(3)) || undefined;
+  const month = parseInt(date.slice(5, 7)) || null;
+  const year = parseInt(date.slice(0, 4)) || null;
 
-  return deadline;
+  // console.log([day, hours, minutes, period, month, year]);
+  return [day, hours, minutes, month, year];
 }
 
 function resetDeadline() {

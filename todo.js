@@ -16,10 +16,7 @@ class Task {
   constructor(name, descript, date, folder, priority, tags) {
     this.name = name;
     this.descript = descript;
-    if (!date) {
-      this.date = new Date();
-      this.date.setHours(23, 59, 59, 0);
-    } else this.date = date;
+    this.date = date;
     this.folder = folder || "Inbox";
     this.priority = priority || 4;
     this.tags = tags || [];
@@ -58,25 +55,21 @@ class CreateTask {
 
   setDate(
     day = null,
-    hours = 11,
+    hours = 23,
     minutes = 59,
-    period = "pm",
     month = null,
     year = null
   ) {
     const date = new Date();
-    if (day < 32 && day > 0) date.setDate(day);
-    if (hours < 13 && hours > 0 && period) {
-      if (period === "am" && hours === 12) date.setHours(0);
-      else if (period === "am" && hours < 12) date.setHours(hours);
-      else if (period === "pm" && hours === 12) date.setHours(12);
-      else if (period === "pm" && hours < 12) date.setHours(hours + 12);
-    }
-    if (minutes < 60 && minutes > 0) date.setMinutes(minutes, 0, 0);
-    if (month) if (month < 13 && month > 0) date.setMonth(month - 1);
+    if (day) date.setDate(day);
+    date.setHours(hours);
+    date.setMinutes(minutes, 0, 0);
+    if (month) date.setMonth(month - 1);
     if (year) date.setFullYear(year);
+    console.log(date);
     this.date = date;
   }
+
   setFolder(name, fm) {
     const isThere = fm.checkName(name);
     if (isThere) {
@@ -114,10 +107,10 @@ class CreateTask {
   getTags() {
     return this.tags;
   }
-  getTag(tagname){
+  getTag(tagname) {
     const hasTag = this.tags.some((tag) => tagname === tag.name);
     const tag = this.tags.find((tag) => tag.name === tagname);
-    if(hasTag)return tag ? tag : false
+    if (hasTag) return tag ? tag : false;
   }
   getName() {
     return this.name;
@@ -185,7 +178,10 @@ class FolderManager {
         [new Tag("Work", "green")]
       )
     );
-    this.folders.push(new Folder("Private", "green"), new Folder("Hobby", "purple"));
+    this.folders.push(
+      new Folder("Private", "green"),
+      new Folder("Hobby", "purple")
+    );
   }
   //Place in folder
   insertTaskToFolder = (task) => {
@@ -643,7 +639,8 @@ export const TaskCreate = (function () {
   const setTag = (name) => createTask.setTag(name, tm);
   const removeTag = (name) => createTask.removeTag(name);
   const getTag = (tagname) => createTask.getTag(tagname);
-  const getTags = ()=> createTask.getTags()
+  const getTags = () => createTask.getTags();
+  const getDate = () => createTask.getDate();
 
   return {
     setName,
@@ -654,7 +651,8 @@ export const TaskCreate = (function () {
     setTag,
     removeTag,
     getTag,
-    getTags
+    getTags,
+    getDate,
   };
 })();
 export const SeeTasks = (function () {
