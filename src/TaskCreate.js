@@ -12,6 +12,7 @@ import {
 } from "./todo";
 import format from "date-fns/format";
 
+//TODO Put into its on module
 function renderInbox() {
   SeeTasks.seeInbox();
   const currentTasks = taskViewer.currentTasks;
@@ -103,6 +104,9 @@ function renderTags(tags) {
 
 export function openCreateTask() {
   const createTask = document.querySelector(".task-create");
+  setDate();
+  setPriority();
+  setFolder();
 
   createTask.showModal();
 }
@@ -113,12 +117,12 @@ function closeCreateTask() {
   createTask.close();
 }
 
-function createNewTask(){
-  TaskActions.makeNewTask()
-  resetTaskCreate()
-  closeCreateTask()
+function createNewTask() {
+  TaskActions.makeNewTask();
+  resetTaskCreate();
+  closeCreateTask();
   renderInbox();
-  console.log(folderManager.inbox);
+  console.log(folderManager.getAllFolders());
 }
 
 function resetTaskCreate() {
@@ -159,8 +163,6 @@ function checkName(name) {
 }
 
 //* Task Create
-
-
 
 (function () {
   const nameInput = document.querySelector(".task-create__name");
@@ -340,14 +342,22 @@ function openPrioritySelection() {
 
 function setCallBackOnPriSel() {
   const priSel = document.querySelector(".task-create__priority-selection");
-  priSel.addEventListener("change", setPriority);
+  priSel.addEventListener("change", changePriority);
 }
 
-function setPriority(e) {
+function changePriority(e) {
   const priorityLabel = document.querySelector(".task-create__priority");
   priorityLabel.textContent = e.currentTarget.value;
+  setPriority();
   hidePrioritySelection();
 }
+
+function setPriority() {
+  const priorityLabel = document.querySelector(".task-create__priority");
+  TaskCreate.setPriority(priorityLabel.textContent);
+}
+
+// function setPriority
 
 function resetOverlay() {
   const overlay = document.querySelector(".overlay");
@@ -417,14 +427,21 @@ function setCallBackOnFolderSelection() {
   const folderSelection = document.querySelector(
     ".task-create__folder-selection"
   );
-  folderSelection.addEventListener("click", setFolder, { once: true });
+  folderSelection.addEventListener("click", changeFolder, { once: true });
 }
 
-function setFolder(e) {
+function changeFolder(e) {
   const folderLabel = document.querySelector(".task-create__folder");
   folderLabel.textContent = e.currentTarget.value;
+  setFolder()
   hideFolderSelection();
 }
+
+function setFolder(){
+  const folderLabel = document.querySelector(".task-create__folder");
+  TaskCreate.setFolder(folderLabel.textContent) 
+}
+
 
 //* Date
 
@@ -462,12 +479,12 @@ function setDate() {
   const timeInput = document.querySelector(".task-create__time-input");
   const deadline = formatDate(dateInput.value, timeInput.value);
   TaskCreate.setDate(...deadline);
-  setDateOnTaskCreate()
+  setDateOnTaskCreate();
 }
 
 function setDateOnTaskCreate() {
   const datelabel = document.querySelector(".task-create__date");
-  const date = TaskCreate.getDate()
+  const date = TaskCreate.getDate();
   const today = new Date();
   console.log(date);
   if (date.getDay() === today.getDay()) {
