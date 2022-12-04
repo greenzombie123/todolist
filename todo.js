@@ -418,7 +418,6 @@ function createNewTask(CreateTask) {
   const priority = CreateTask.getPriority();
   const tags = CreateTask.getTags();
   const task = new Task(name, descript, date, folder, priority, tags);
-  console.log(task);
   emitter.emit("taskCreated", { task });
 }
 
