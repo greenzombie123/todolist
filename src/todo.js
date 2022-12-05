@@ -53,13 +53,7 @@ class CreateTask {
   priority = null;
   tags = [];
 
-  setDate(
-    day = null,
-    hours = 23,
-    minutes = 59,
-    month = null,
-    year = null
-  ) {
+  setDate(day = null, hours = 23, minutes = 59, month = null, year = null) {
     const date = new Date();
     if (day) date.setDate(day);
     date.setHours(hours);
@@ -165,23 +159,29 @@ class FolderManager {
     this.inbox = new Folder("Inbox", "black");
     this.completed = new Folder("Completed", "black");
     this.inbox.tasks.push(
-      new Task("Do laundry", null, new Date(2022, 11, 15), null, 1, [
+      new Task("Do laundry", null, new Date(2022, 12, 6), null, 1, [
         new Tag("Work", "green"),
         new Tag("School", "yellow"),
       ]),
       new Task(
         "Pay bills",
         "Go to Walgreens",
-        new Date(2022, 11, 16),
+        new Date(2022, 12, 8),
         "Inbox",
         3,
         [new Tag("Work", "green")]
-      )
+      ),
+      new Task("Buy new towel", "Oh yeah!", new Date(2022, 12, 7), null, 3, [
+        new Tag("Stuff", "blue"),
+      ]),
     );
     this.folders.push(
       new Folder("Private", "green"),
       new Folder("Hobby", "purple")
     );
+    this.folders[1].tasks.push(new Task("Buy shoes", null, new Date(2022, 12, 7), "Private", 1, [
+      new Tag("Stuff", "blue"),
+    ]))
   }
   //Place in folder
   insertTaskToFolder = (task) => {
@@ -294,17 +294,15 @@ function seeTasksbyPriority(number, fm, tv) {
   tv.render();
 }
 
-function seeTasksByToday(fm) {
+function seeTasksByToday(fm, tv) {
   const folders = fm.getAllFolders();
   const allTasks = [];
   folders.forEach((folder) =>
     folder.tasks.forEach((task) => allTasks.push(task))
   );
 
-  const date = new Date().getDay();
-  tv.currentTasks = allTasks.filter(
-    (task) => task.date.getDay() === date.getDate()
-  );
+  const today = new Date().getDate();
+  tv.currentTasks = allTasks.filter((task) => task.date.getDate() === today);
 
   tv.currentName = "Today";
   tv.lastSeeTaskFunc = () => seeTasksByToday();
@@ -468,20 +466,18 @@ class Editor {
     );
     emitter.emit("rerender");
   }
-  editDate(taskName, tv, day, hours, minutes, period, month, year) {
+  
+  editDate(taskName, tv, day, hours, minutes, month, year) {
     const task = tv.getCurrentTask(taskName);
-    if (day < 32 && day > 0) task.date.setDate(day);
-    if (hours < 13 && hours > 0 && period) {
-      if (period === "am" && hours === 12) task.date.setHours(0);
-      else if (period === "am" && hours < 12) task.date.setHours(hours);
-      else if (period === "pm" && hours === 12) task.date.setHours(12);
-      else if (period === "pm" && hours < 12) task.date.setHours(hours + 12);
-    }
-    if (minutes < 60 && minutes >= 0) task.date.setMinutes(minutes, 0, 0);
-    if (month) if (month < 13 && month > 0) task.date.setMonth(month - 1);
-    if (year) task.date.setFullYear(year);
+
+    task.date.setDate(day);
+    task.date.setHours(hours);
+    task.date.setMinutes(minutes, 0, 0);
+    task.date.setMonth(month - 1);
+    task.date.setFullYear(year);
     emitter.emit("rerender");
   }
+
   editPriority(taskName, tv, number) {
     const task = tv.getCurrentTask(taskName);
     if (number > 0 && number < 5 && number !== task.priority) {
@@ -663,7 +659,7 @@ export const SeeTasks = (function () {
     seeTaskByFolder(name, fm, tv);
   };
   const seeToday = function () {
-    seeTasksByToday(fm);
+    seeTasksByToday(fm, tv);
   };
   const seePriority = function (number) {
     seeTasksbyPriority(number, fm, tv);

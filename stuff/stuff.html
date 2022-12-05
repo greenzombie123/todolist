@@ -1,0 +1,104 @@
+<div class="taskbar">
+    <div class="taskbar__content">
+      <input
+        type="checkbox"
+        name="completed"
+        id=""
+        class="taskbar__checkbox"
+      />
+      <div class="taskbar__top">
+        <span class="taskbar__name">
+          <a href="" class="taskbar__name-link">Wash the car</a>
+        </span>
+        <span class="taskbar__folder">
+          <a href="" class="taskbar__folder-link">Inbox</a>
+          <!--TODO Module-->
+          <div class="edit-folder edit-folder--hidden">
+            <select
+              name="folder"
+              id="folder"
+              class="edit-folder__folder-selection"
+            >
+              <option value="Inbox" class="edit-folder__folderoption">
+                Inbox
+              </option>
+            </select>
+          </div>
+        </span>
+      </div>
+      <!--TODO Make a module and insert HTML-->
+      <div class="taskbar__priority">
+        &#9650;
+        <div class="edit-priority edit-priority--hidden">
+          <select
+            name="priority"
+            id="priority"
+            class="edit-priority__priority-selection"
+          >
+            <option value="1" class="edit-priority__priorityoption">
+              1
+            </option>
+            <option value="2" class="edit-priority__priorityoption">
+              2
+            </option>
+            <option value="3" class="edit-priority__priorityoption">
+              3
+            </option>
+            <option value="4" class="edit-priority__priorityoption">
+              4
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <span class="taskbar__descript">
+        <span class="taskbar__descript-link"
+          >Use that soap Kelly got you</span
+        >
+      </span>
+
+      <div class="taskbar__bottom">
+        <span class="taskbar__date">
+          <a href="" class="taskbar__date-link">Mon Nov 18 4:15pm</a>
+          <!--TODO Make a module out of this-->
+          <div class="editdate editdate--hidden">
+            <label class="editdate__date-label" for="date"
+              >Deadline</label
+            >
+            <label class="editdate__time-label" for="time">Time</label>
+            <input
+              type="date"
+              name="date"
+              class="editdate__date-input"
+            />
+
+            <input
+              type="time"
+              name="time"
+              class="editdate__time-input"
+            />
+          </div>
+        </span>
+        <div class="taskbar__tagsection">
+          <div class="taskbar__tag">Work</div>
+          <div class="taskbar__tag">15 Minutes</div>
+          <!--TODO Make a module out of this-->
+          <div class="edit-tags edit-tags--hidden">
+            <ul class="edit-tags__taglist">
+              <li class="edit-tags__tag-listitem">
+                <label for="" class="edit-tags__tagname">Work</label
+                ><input
+                  type="checkbox"
+                  name="tagname"
+                  id="tagname"
+                  class="edit-tags__tag-checkbox"
+                  value="work"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="taskbar__trashbin">&#128465;</div>
+  </div>

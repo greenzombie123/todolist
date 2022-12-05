@@ -10,90 +10,12 @@ import {
   tagManager,
   colorManager,
 } from "./todo";
+import { taskRenderer } from "./render";
 import format from "date-fns/format";
+import { resetModal } from "./helpers";
 
 //TODO Put into its on module
-function renderInbox() {
-  SeeTasks.seeInbox();
-  const currentTasks = taskViewer.currentTasks;
-  let currentName = document.querySelector(".taskview__name");
-  currentName.textContent = taskViewer.currentName;
 
-  const taskview = document.querySelector(".taskview");
-
-  currentTasks.forEach((task) => {
-    const string = `<div class="taskbar">
-            <div class="taskbar__content">
-              <input
-                type="checkbox"
-                name="completed"
-                id=""
-                class="taskbar__checkbox"
-              />
-              <div class="taskbar__top">
-                <span class="taskbar__name">
-                  <a href="" class="taskbar__name-link">${task.name}</a>
-                </span>
-                <span class="taskbar__folder">
-                  ${renderFolder(task.folder)}
-                </span>
-              </div>
-              <div class="taskbar__priority">
-                &#9650;
-                
-              </div>
-              ${renderDescription(task.descript)}
-              <div class="taskbar__bottom">
-                <span class="taskbar__date">
-                  <a href="" class="taskbar__date-link">${renderDate(
-                    task.date
-                  )}</a>
-                </span>
-                <div class="taskbar__tagsection">
-                  ${renderTags(task.tags)}
-                </div>
-              </div>
-            </div>
-            <div class="taskbar__trashbin">&#128465;</div>
-          </div>`;
-
-    taskview.insertAdjacentHTML("beforeend", string);
-  });
-}
-
-renderInbox();
-
-function renderDescription(descript) {
-  return descript
-    ? `<span class="taskbar__descript">
-<span class="taskbar__descript-link"
->${descript}</span
->
-</span>`
-    : ``;
-}
-
-function renderDate(date) {
-  //* Month Date Day Time
-  return format(date, "MMM do eee p");
-}
-
-function renderFolder(foldername) {
-  const folder = folderManager.getFolder(foldername);
-
-  return `<a href="" class="taskbar__folder-link taskbar__folder-link--${folder.color}">${foldername}</a>`;
-}
-
-function renderTags(tags) {
-  let string = ``;
-  string = tags.reduce((p, n) => {
-    return p.concat(
-      `<div class="taskbar__tag taskbar__tag--${n.color}">${n.name}</div>`
-    );
-  }, string);
-  console.log(string);
-  return string;
-}
 
 //* Task Create
 
@@ -121,7 +43,7 @@ function createNewTask() {
   TaskActions.makeNewTask();
   resetTaskCreate();
   closeCreateTask();
-  renderInbox();
+  taskRenderer.reRender();
   console.log(folderManager.getAllFolders());
 }
 
@@ -240,7 +162,7 @@ function cleanupListOfEventListeners(className) {
       element.removeChild(element.firstChild);
     }
   }
-  return element;
+  //return element;
 }
 
 function revealTaskCreate_TagList() {
@@ -509,6 +431,7 @@ function revealDateContainer() {
 function hideDateContainer() {
   const dateContainer = document.querySelector(".task-create__date-container");
   dateContainer.classList.toggle("task-create__date-container--hidden");
+  resetModal(dateContainer, true)
   closeOverlay();
 }
 
