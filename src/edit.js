@@ -22,41 +22,52 @@ import {
 
 export function setEditDateModal(task, datelink) {
   const link = datelink;
-  let dateContainer = document.querySelector(".task-create__date-container");
-  dateContainer = resetModal(dateContainer, true);
-  const dateInput = document.querySelector(".task-create__date-input");
-  const timeInput = document.querySelector(".task-create__time-input");
 
   link.addEventListener("click", function () {
-    dateInput.addEventListener("click", () => {
+    let dateContainer = createEditDateContainer();
+    const dateInput = dateContainer.querySelector(
+      ".editbox .task-create__date-input"
+    );
+    const timeInput = dateContainer.querySelector(
+      ".editbox .task-create__time-input"
+    );
+    timeInput.addEventListener("change", (e) => {
       editDate(task.name);
-      toggleModal(dateContainer, "task-create__date-container");
+    });
+    dateInput.addEventListener("change", (e) => {
+      editDate(task.name);
       toggleOverlay();
     });
-    timeInput.addEventListener("click", editDate(task.name));
     setDateInputValues(task);
-    let callback = () =>
-      toggleModal(dateContainer, "task-create__date-container");
-    setOverlay(callback);
+    setOverlay();
+    toggleOverlay();
     positionModal(datelink, dateContainer);
-    toggleModal(dateContainer, "task-create__date-container");
   });
 }
 
 function setDateInputValues(task) {
   const date = formatDateForInput(task.date);
-  const dateInput = document.querySelector(".task-create__date-input");
-  const timeInput = document.querySelector(".task-create__time-input");
+  const dateInput = document.querySelector(
+    ".main-overlay .task-create__date-input"
+  );
+  const timeInput = document.querySelector(
+    ".main-overlay .task-create__time-input"
+  );
   dateInput.value = date.dateString;
   timeInput.value = date.timeString;
 }
 
 function editDate(taskname) {
-  const dateInput = document.querySelector(".task-create__date-input");
-  const timeInput = document.querySelector(".task-create__time-input");
+  const dateInput = document.querySelector(
+    ".main-overlay .task-create__date-input"
+  );
+  const timeInput = document.querySelector(
+    ".main-overlay .task-create__time-input"
+  );
 
   const date = formatDateForTask(dateInput.value, timeInput.value);
   Editor.editTaskDate(taskname, ...date);
+  taskRenderer.reRender();
 }
 
 function formatDateForInput(date) {
@@ -73,11 +84,10 @@ function formatDateForTask(date, time) {
   const month = parseInt(date.slice(5, 7)) || null;
   const year = parseInt(date.slice(0, 4)) || null;
 
-  // console.log([day, hours, minutes, period, month, year]);
   return [day, hours, minutes, month, year];
 }
 
-function createDateEditContainer() {
+function createEditDateContainer() {
   const overlay = document.querySelector(".main-overlay");
   const string = `
   <div class="editbox">
@@ -101,5 +111,112 @@ function createDateEditContainer() {
   </div>
   `;
   overlay.insertAdjacentHTML("afterbegin", string);
-  return document.querySelector('.editbox');
+  return document.querySelector(".editbox");
 }
+
+//* Tag
+
+export function setEditTagModal(task, tagdiv) {
+  //const tagdiv = document.querySelector('.main-overlay .taskbar__tagsection');
+
+  tagdiv.addEventListener("click", function (e) {
+    const tagList = createTagList(task.tags);
+    setOverlay(() => editTags(task.name));
+    toggleOverlay();
+    positionModal(tagdiv, tagList);
+  });
+}
+
+function createTagList(tags) {
+  const overlay = document.querySelector(".main-overlay");
+  const string = `<ul class="task-create__taglist"></ul>`;
+
+  overlay.insertAdjacentHTML("afterbegin", string);
+
+  const tagList = document.querySelector(".main-overlay .task-create__taglist");
+
+  createTagListItems(tags, tagList);
+
+  return tagList;
+}
+
+function createTagListItems(taskTags, taglist) {
+  const tags = tagManager.getAllTags();
+  tags.forEach((tag) => {
+    const string = `<li
+    class="task-create__tag-listitem task-create__tag-listitem--${tag.color}"
+  >
+    <label for="" class="task-create__tagname">${tag.name}</label
+    ><input
+      type="checkbox"
+      name="tagname"
+      id="tagname"
+      class="task-create__tag-checkbox"
+      value="${tag.name}"
+      ${taskTags.some((taskTag) => taskTag.name === tag.name) ? `checked` : ``}
+    />
+  </li>`;
+
+    taglist.insertAdjacentHTML("beforeend", string);
+  });
+}
+
+function getTagNames() {
+  const tagListItems = document.querySelectorAll(
+    ".main-overlay .task-create__tag-checkbox"
+  );
+  const tagnames = [];
+  tagListItems.forEach((listItem) => {
+    if (listItem.checked) tagnames.push(listItem.value);
+  });
+  return tagnames;
+}
+
+function editTags(taskname) {
+  Editor.removeTags(taskname);
+  const tagnames = getTagNames();
+  Editor.addNewTags(taskname, tagnames);
+  taskRenderer.reRender();
+}
+
+//* Priority
+
+export function setEditPriorityModal(task, pri) {
+  pri.addEventListener("click", function (e) {
+    const priSel = createPrioritySelection();
+    priSel.addEventListener('click', (e)=>editPriority(task.name, e.currentTarget.value))
+    setOverlay()
+    toggleOverlay()
+    positionModal(pri, priSel)
+  });
+}
+
+function createPrioritySelection() {
+  const overlay = document.querySelector(".main-overlay");
+  const string = `<select
+  name="priority"
+  id="priority"
+  class="task-create__priority-selection"
+>
+  <option value="1" class="task-create__priorityoption">1</option>
+  <option value="2" class="task-create__priorityoption">2</option>
+  <option value="3" class="task-create__priorityoption">3</option>
+  <option value="4" class="task-create__priorityoption">4</option>
+</select>`;
+
+  overlay.insertAdjacentHTML("beforeend", string);
+
+  const priSel = document.querySelector(
+    ".main-overlay .task-create__priority-selection"
+  );
+
+  return priSel;
+}
+
+function editPriority(taskname, priority) {
+  Editor.editTaskPriority(taskname, parseInt(priority))
+  taskRenderer.reRender();
+  toggleOverlay()
+}
+
+//task-create__priority-selection

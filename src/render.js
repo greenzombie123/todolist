@@ -10,7 +10,7 @@ import {
   tagManager,
   colorManager,
 } from "./todo";
-import { setEditDateModal } from "./edit";
+import { setEditDateModal, setEditPriorityModal, setEditTagModal } from "./edit";
 import format from "date-fns/format";
 
 function render() {
@@ -18,55 +18,7 @@ function render() {
   const currentTasks = taskViewer.currentTasks;
   let currentName = document.querySelector(".taskview__name");
   currentName.textContent = taskViewer.currentName;
-  let counter = 1;
-
-  const taskview = document.querySelector(".taskview");
-
-  currentTasks.forEach((task) => {
-    const string = `<div class="taskbar" data-id=${counter}>
-              <div class="taskbar__content">
-                <input
-                  type="checkbox"
-                  name="completed"
-                  id=""
-                  class="taskbar__checkbox"
-                />
-                <div class="taskbar__top">
-                  <span class="taskbar__name">
-                    <a href="" class="taskbar__name-link">${task.name}</a>
-                  </span>
-                  <span class="taskbar__folder">
-                    ${renderFolder(task.folder)}
-                  </span>
-                </div>
-                <div class="taskbar__priority">
-                  &#9650;
-                  
-                </div>
-                ${renderDescription(task.descript)}
-                <div class="taskbar__bottom">
-                  <span class="taskbar__date">
-                    <button type="button" class="taskbar__date-link">${renderDate(
-                      task.date
-                    )}</button>
-                  </span>
-                  <div class="taskbar__tagsection">
-                    ${renderTags(task.tags)}
-                  </div>
-                </div>
-              </div>
-              <div class="taskbar__trashbin">&#128465;</div>
-            </div>`;
-
-    taskview.insertAdjacentHTML("beforeend", string);
-
-    const editLink = document.querySelector(
-      `div[data-id='${counter}'] .taskbar__date-link`
-    );
-    setEditDateModal(task, editLink);
-
-    counter++;
-  });
+  createTaskBars(currentTasks);
 
   taskRenderer.setLastFunction(render);
 }
@@ -76,7 +28,7 @@ function renderUpcoming() {
   const days = Object.getOwnPropertyNames(taskViewer.upcomingTasks);
   let currentName = document.querySelector(".taskview__name");
   currentName.textContent = taskViewer.currentName;
-  let counter = 1;
+  const id = {counter : 1};
 
   const taskview = document.querySelector(".taskview");
 
@@ -85,54 +37,66 @@ function renderUpcoming() {
     heading.classList.add("taskview__day");
     heading.textContent = day;
     taskview.appendChild(heading);
+    createTaskBars(taskViewer.upcomingTasks[day], id);
 
-    taskViewer.upcomingTasks[day].forEach((task) => {
-      const string = `<div class="taskbar" data-id=${counter}>
-              <div class="taskbar__content">
-                <input
-                  type="checkbox"
-                  name="completed"
-                  id=""
-                  class="taskbar__checkbox"
-                />
-                <div class="taskbar__top">
-                  <span class="taskbar__name">
-                    <a href="" class="taskbar__name-link">${task.name}</a>
-                  </span>
-                  <span class="taskbar__folder">
-                    ${renderFolder(task.folder)}
-                  </span>
-                </div>
-                <div class="taskbar__priority">
-                  &#9650;
-                  
-                </div>
-                ${renderDescription(task.descript)}
-                <div class="taskbar__bottom">
-                  <span class="taskbar__date">
-                    <a href="" class="taskbar__date-link">${renderDate(
-                      task.date
-                    )}</a>
-                  </span>
-                  <div class="taskbar__tagsection">
-                    ${renderTags(task.tags)}
-                  </div>
-                </div>
-              </div>
-              <div class="taskbar__trashbin">&#128465;</div>
-            </div>`;
-
-      taskview.insertAdjacentHTML("beforeend", string);
-
-      const editLink = document.querySelector(
-        `div[data-id='${counter}'] .taskbar__date-link`
-      );
-      setEditDateModal(task.name, editLink);
-      counter++
-    });
   });
 
   taskRenderer.setLastFunction(renderUpcoming);
+}
+
+function createTaskBars(tasks, id = {counter:1}) {
+  const taskview = document.querySelector(".taskview");
+  tasks.forEach((task) => {
+    const string = `<div class="taskbar" data-id=${id.counter}>
+                <div class="taskbar__content ${renderPriorityBorder(task.priority)}">
+                  <input
+                    type="checkbox"
+                    name="completed"
+                    id=""
+                    class="taskbar__checkbox"
+                  />
+                  <div class="taskbar__top">
+                    <span class="taskbar__name">
+                      <a href="" class="taskbar__name-link">${task.name}</a>
+                    </span>
+                    <span class="taskbar__folder">
+                      ${renderFolder(task.folder)}
+                    </span>
+                  </div>
+                  <div class="taskbar__priority">
+                    &#9650;
+                    
+                  </div>
+                  ${renderDescription(task.descript)}
+                  <div class="taskbar__bottom">
+                    <span class="taskbar__date">
+                      <button type="button" class="taskbar__date-link">${renderDate(
+                        task.date
+                      )}</button>
+                    </span>
+                    <div class="taskbar__tagsection">
+                      ${renderTags(task.tags)}
+                    </div>
+                  </div>
+                </div>
+                <div class="taskbar__trashbin">&#128465;</div>
+              </div>`;
+
+    taskview.insertAdjacentHTML("beforeend", string);
+
+    const editLink = document.querySelector(
+      `div[data-id='${id.counter}'] .taskbar__date-link`
+    );
+    setEditDateModal(task, editLink);
+
+    const editTag = document.querySelector(`div[data-id='${id.counter}'] .taskbar__tagsection`);
+    setEditTagModal(task, editTag)
+
+    const editPriority = document.querySelector(`div[data-id='${id.counter}'] .taskbar__priority`);
+    setEditPriorityModal(task, editPriority)
+
+    id.counter++;
+  });
 }
 
 function resetTaskView() {
@@ -156,6 +120,19 @@ function renderDescription(descript) {
     : ``;
 }
 
+function renderPriorityBorder(priority){
+  switch (priority) {
+    case 1:
+      return `taskbar__content--onePriority`;
+    case 2:
+      return `taskbar__content--twoPriority`;
+    case 3:
+      return `taskbar__content--threePriority`;
+    default:
+      return ``
+  }
+}
+
 function renderDate(date) {
   //* Month Date Day Time
   return format(date, "MMM do eee p");
@@ -168,13 +145,15 @@ function renderFolder(foldername) {
 }
 
 function renderTags(tags) {
+  if(!tags.length){
+    return `<div>Add Tag</div>`
+  }
   let string = ``;
   string = tags.reduce((p, n) => {
     return p.concat(
       `<div class="taskbar__tag taskbar__tag--${n.color}">${n.name}</div>`
     );
   }, string);
-  console.log(string);
   return string;
 }
 

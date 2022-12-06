@@ -2,7 +2,7 @@
   --yellow: yellow;
 }
 
-body{
+body {
   position: relative;
 }
 
@@ -61,6 +61,7 @@ body{
   margin-bottom: 10px;
 }
 
+
 .taskbar__content {
   position: relative;
   display: grid;
@@ -74,6 +75,18 @@ body{
 
   flex: 1;
   border: 1px solid blue;
+}
+
+.taskbar__content--onePriority {
+  border: solid red;
+}
+
+.taskbar__content--twoPriority {
+  border: solid rgb(253, 162, 17);
+}
+
+.taskbar__content--threePriority {
+  border: solid rgb(255, 255, 0);
 }
 
 .taskbar__checkbox {
@@ -161,6 +174,7 @@ body{
   /* border: 1px solid black; */
   font-size: 2rem;
   color: red;
+  cursor: pointer;
 }
 
 .taskbar__bottom {
@@ -178,7 +192,7 @@ body{
   position: relative;
 }
 .taskbar__date-link {
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
   border: none;
   text-align: left;
   cursor: pointer;
@@ -189,6 +203,7 @@ body{
   position: relative;
   display: flex;
   flex-flow: row nowrap;
+  cursor: pointer;
 }
 .taskbar__tag {
   font-size: 1rem;
@@ -369,7 +384,7 @@ body{
   background-color: transparent;
 }
 
-.task-create__date-button:hover{
+.task-create__date-button:hover {
   background-color: rgba(135, 137, 138, 0.475);
 }
 
@@ -390,7 +405,7 @@ body{
   border: 1px solid black;
 }
 
-.task-create__date-container--hidden{
+.task-create__date-container--hidden {
   display: none;
 }
 
@@ -418,7 +433,7 @@ body{
   background-color: transparent;
 }
 
-.task-create__tag-button:hover{
+.task-create__tag-button:hover {
   background-color: rgba(135, 137, 138, 0.475);
 }
 
@@ -458,7 +473,6 @@ body{
   border: 3px solid black;
 }
 
-
 .task-create__taglist {
   position: fixed;
   width: 15rem;
@@ -472,7 +486,7 @@ body{
   z-index: 2;
 }
 
-.task-create__taglist--hidden{
+.task-create__taglist--hidden {
   display: none;
 }
 
@@ -482,7 +496,7 @@ body{
   justify-content: space-between;
   padding-left: 1.5rem;
   align-items: center;
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 
 .task-create__tag-listitem--red::before {
@@ -537,7 +551,7 @@ body{
   background-color: transparent;
 }
 
-.task-create__priority-button:hover{
+.task-create__priority-button:hover {
   background-color: rgba(135, 137, 138, 0.475);
 }
 
@@ -552,12 +566,11 @@ body{
   z-index: 2;
 }
 
-.task-create__priority-selection--hidden{
+.task-create__priority-selection--hidden {
   display: none;
 }
 
 .task-create__priorityoption {
-
 }
 
 .task-create__folder-button {
@@ -571,11 +584,11 @@ body{
   background-color: transparent;
 }
 
-.task-create__folder-button:hover{
+.task-create__folder-button:hover {
   background-color: rgba(135, 137, 138, 0.475);
 }
 
-.task-create__folder{
+.task-create__folder {
   font-size: 1rem;
 }
 
@@ -587,7 +600,7 @@ body{
   z-index: 2;
 }
 
-.task-create__folder-selection--hidden{
+.task-create__folder-selection--hidden {
   display: none;
 }
 
@@ -600,7 +613,8 @@ body{
   align-self: flex-end;
 }
 
-.poppers{}
+.poppers {
+}
 
 /*Edit Date*/
 

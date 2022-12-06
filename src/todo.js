@@ -60,7 +60,6 @@ class CreateTask {
     date.setMinutes(minutes, 0, 0);
     if (month) date.setMonth(month - 1);
     if (year) date.setFullYear(year);
-    console.log(date);
     this.date = date;
   }
 
@@ -120,7 +119,6 @@ class CreateTask {
     const hasTag = this.tags.some((tag) => tagname === tag.name);
     if (hasTag) {
       _.remove(this.tags, (tag) => tagname === tag.name);
-      console.log(this.tags);
     }
   }
 
@@ -159,19 +157,19 @@ class FolderManager {
     this.inbox = new Folder("Inbox", "black");
     this.completed = new Folder("Completed", "black");
     this.inbox.tasks.push(
-      new Task("Do laundry", null, new Date(2022, 12, 6), null, 1, [
+      new Task("Do laundry", null, new Date(2022, 11, 7, 9, 12), null, 1, [
         new Tag("Work", "green"),
         new Tag("School", "yellow"),
       ]),
       new Task(
         "Pay bills",
         "Go to Walgreens",
-        new Date(2022, 12, 8),
+        new Date(2022, 11, 8, 11, 2),
         "Inbox",
         3,
         [new Tag("Work", "green")]
       ),
-      new Task("Buy new towel", "Oh yeah!", new Date(2022, 12, 7), null, 3, [
+      new Task("Buy new towel", "Oh yeah!", new Date(2022, 11, 7, 8, 10), null, 2, [
         new Tag("Stuff", "blue"),
       ]),
     );
@@ -179,7 +177,7 @@ class FolderManager {
       new Folder("Private", "green"),
       new Folder("Hobby", "purple")
     );
-    this.folders[1].tasks.push(new Task("Buy shoes", null, new Date(2022, 12, 7), "Private", 1, [
+    this.folders[1].tasks.push(new Task("Buy shoes", null, new Date(2022, 11, 7, 17, 43), "Private", 1, [
       new Tag("Stuff", "blue"),
     ]))
   }
@@ -406,7 +404,6 @@ class TaskViewer {
 
 function createNewTask(CreateTask) {
   if (CreateTask.getName() === undefined) {
-    console.log("Enter name!");
     return;
   }
   const name = CreateTask.getName();
@@ -497,6 +494,12 @@ class Editor {
       newfolder.tasks.push(task);
       emitter.emit("rerender");
     }
+  }
+
+  removeAllTags(taskName, tv){
+    const task = tv.getCurrentTask(taskName);
+    task.tags = []
+    console.log(task.tags);
   }
 }
 
@@ -619,7 +622,7 @@ emitter.on("taskCreated", (e) => {
 emitter.on("taskCreated", createTask.reset);
 emitter.on("rerender", (e) => taskViewer.lastSeeTaskFunc(e));
 
-seeTasksByInbox(folderManager, taskViewer);
+// seeTasksByInbox(folderManager, taskViewer);
 
 export const TaskCreate = (function () {
   const fm = folderManager;
@@ -758,6 +761,7 @@ const edit = (function () {
     editor.editPriority(taskName, tv, number);
   const changeFolder = (taskName, newFolder) =>
     editor.changeFolder(taskName, newFolder, tv, fm);
+  const removeTags = (taskName) => editor.removeAllTags(taskName, tv)
 
   return {
     editTaskName,
@@ -767,6 +771,7 @@ const edit = (function () {
     editTaskDate,
     editTaskPriority,
     changeFolder,
+    removeTags
   };
 })();
 //export { createTask as CreateTask };

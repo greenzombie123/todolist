@@ -44,7 +44,6 @@ function createNewTask() {
   resetTaskCreate();
   closeCreateTask();
   taskRenderer.reRender();
-  console.log(folderManager.getAllFolders());
 }
 
 function resetTaskCreate() {
@@ -100,6 +99,8 @@ function setName(e) {
 function setDescript(e) {
   TaskCreate.setDescript(e.currentTarget.value);
 }
+
+//* Tags
 
 const tagbutton = document.querySelector(".task-create__tag-button");
 tagbutton.addEventListener("click", openTaskCreate_TagList);
@@ -162,7 +163,7 @@ function cleanupListOfEventListeners(className) {
       element.removeChild(element.firstChild);
     }
   }
-  //return element;
+  return element;
 }
 
 function revealTaskCreate_TagList() {
@@ -174,7 +175,6 @@ function setTag(e) {
   const tagname = e.currentTarget.value;
   if (e.currentTarget.checked) TaskCreate.setTag(tagname);
   else TaskCreate.removeTag(tagname);
-  console.log(e.currentTarget.value);
 }
 
 function changeTagContainer() {
@@ -408,7 +408,6 @@ function setDateOnTaskCreate() {
   const datelabel = document.querySelector(".task-create__date");
   const date = TaskCreate.getDate();
   const today = new Date();
-  console.log(date);
   if (date.getDay() === today.getDay()) {
     datelabel.textContent = format(
       date,
