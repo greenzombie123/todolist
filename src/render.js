@@ -10,7 +10,7 @@ import {
   tagManager,
   colorManager,
 } from "./todo";
-import { setEditDateModal, setEditPriorityModal, setEditTagModal } from "./edit";
+import { setEditDateModal, setEditFolderModal, setEditPriorityModal, setEditTagModal } from "./edit";
 import format from "date-fns/format";
 
 function render() {
@@ -95,6 +95,9 @@ function createTaskBars(tasks, id = {counter:1}) {
     const editPriority = document.querySelector(`div[data-id='${id.counter}'] .taskbar__priority`);
     setEditPriorityModal(task, editPriority)
 
+    const editFolder = document.querySelector(`div[data-id='${id.counter}'] .taskbar__folder-link`);
+    setEditFolderModal(task, editFolder)
+
     id.counter++;
   });
 }
@@ -141,7 +144,7 @@ function renderDate(date) {
 function renderFolder(foldername) {
   const folder = folderManager.getFolder(foldername);
 
-  return `<a href="" class="taskbar__folder-link taskbar__folder-link--${folder.color}">${foldername}</a>`;
+  return `<button type="button" class="taskbar__folder-link taskbar__folder-link--${folder.color}">${foldername}</button>`;
 }
 
 function renderTags(tags) {

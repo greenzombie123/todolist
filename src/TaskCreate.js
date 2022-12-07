@@ -276,7 +276,7 @@ function changePriority(e) {
 
 function setPriority() {
   const priorityLabel = document.querySelector(".task-create__priority");
-  TaskCreate.setPriority(priorityLabel.textContent);
+  TaskCreate.setPriority(parseInt(priorityLabel.textContent));
 }
 
 // function setPriority

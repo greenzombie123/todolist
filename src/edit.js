@@ -184,10 +184,12 @@ function editTags(taskname) {
 export function setEditPriorityModal(task, pri) {
   pri.addEventListener("click", function (e) {
     const priSel = createPrioritySelection();
-    priSel.addEventListener('click', (e)=>editPriority(task.name, e.currentTarget.value))
-    setOverlay()
-    toggleOverlay()
-    positionModal(pri, priSel)
+    priSel.addEventListener("click", (e) =>
+      editPriority(task.name, e.currentTarget.value)
+    );
+    setOverlay();
+    toggleOverlay();
+    positionModal(pri, priSel);
   });
 }
 
@@ -214,9 +216,62 @@ function createPrioritySelection() {
 }
 
 function editPriority(taskname, priority) {
-  Editor.editTaskPriority(taskname, parseInt(priority))
+  Editor.editTaskPriority(taskname, parseInt(priority));
   taskRenderer.reRender();
-  toggleOverlay()
+  toggleOverlay();
 }
 
-//task-create__priority-selection
+//* Folder
+//taskbar__folder-link
+export function setEditFolderModal(task, folderLink) {
+
+  folderLink.addEventListener('click', function(e){
+    const folSel = createFolderSelection(task.name)
+    folSel.addEventListener('click', (e)=>changeFolder(task.name, e.currentTarget.value))
+    setOverlay()
+    toggleOverlay()
+    positionModal(folderLink, folSel)
+  })
+}
+
+function changeFolder(taskname, foldername) {
+  Editor.changeFolder(taskname, foldername)
+  taskRenderer.reRender();
+  toggleOverlay();
+}
+
+function createFolderSelection(foldername) {
+  const overlay = document.querySelector(".main-overlay");
+  const string = `<select
+  name="folder"
+  id="folder"
+  class="task-create__folder-selection "
+>
+  
+    Inbox
+  </option>
+</select>`;
+
+  overlay.insertAdjacentHTML("beforeend", string);
+
+  const folSel = document.querySelector(
+    ".main-overlay .task-create__folder-selection"
+  );
+
+  createFolderOptions(folSel, foldername)
+
+  return folSel;
+}
+
+function createFolderOptions(folderSelection, taskFolderName){
+  const folders = folderManager.getAllFolders();
+  folders.forEach((folder) => {
+    const option = document.createElement("option");
+    option.setAttribute("value", `${folder.name}`);
+    option.classList.add("task-create__folder-option");
+    option.style.setProperty("color", `${folder.color}`);
+    option.textContent = folder.name;
+    folderSelection.appendChild(option);
+    if(folder.name === taskFolderName)option.setAttribute("selected", '')
+  });
+}

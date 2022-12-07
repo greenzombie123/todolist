@@ -5,8 +5,8 @@ import { SeeTasks } from "./todo";
 const openbutton = document.querySelector(".header__create-task-button");
 openbutton.addEventListener("click", openCreateTask);
 
-// SeeTasks.seeUpcoming()
-// taskRenderer.renderUpcoming()
+SeeTasks.seeUpcoming()
+taskRenderer.renderUpcoming()
 
-SeeTasks.seeInbox()
-taskRenderer.render()
+// SeeTasks.seeInbox()
+// taskRenderer.render()
