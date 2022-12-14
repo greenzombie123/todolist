@@ -157,19 +157,19 @@ class FolderManager {
     this.inbox = new Folder("Inbox", "black");
     this.completed = new Folder("Completed", "black");
     this.inbox.tasks.push(
-      new Task("Do laundry", null, new Date(2022, 11, 7, 9, 12), null, 1, [
+      new Task("Do laundry", null, new Date(2022, 11, 7, 9, 12), "Inbox", 1, [
         new Tag("Work", "green"),
         new Tag("School", "yellow"),
       ]),
       new Task(
         "Pay bills",
         "Go to Walgreens",
-        new Date(2022, 11, 8, 11, 2),
+        new Date(2022, 11, 13, 11, 2),
         "Inbox",
         3,
         [new Tag("Work", "green")]
       ),
-      new Task("Buy new towel", "Oh yeah!", new Date(2022, 11, 7, 8, 10), null, 2, [
+      new Task("Buy new towel", "Oh yeah!", new Date(2022, 11, 15, 8, 10), null, 2, [
         new Tag("Stuff", "blue"),
       ]),
     );
@@ -177,8 +177,11 @@ class FolderManager {
       new Folder("Private", "green"),
       new Folder("Hobby", "purple")
     );
-    this.folders[1].tasks.push(new Task("Buy shoes", null, new Date(2022, 11, 7, 17, 43), "Private", 1, [
+    this.folders[0].tasks.push(new Task("Buy shoes", null, new Date(2022, 11, 17, 17, 43), "Private", 1, [
       new Tag("Stuff", "blue"),
+    ])),
+    this.folders[1].tasks.push(new Task("Eat pasta", "Do it!", new Date(2022, 11, 15, 21, 2), "Hobby", 4, [
+      new Tag("School", "yellow"),
     ]))
   }
   //Place in folder
@@ -303,7 +306,7 @@ function seeTasksByToday(fm, tv) {
   tv.currentTasks = allTasks.filter((task) => task.date.getDate() === today);
 
   tv.currentName = "Today";
-  tv.lastSeeTaskFunc = () => seeTasksByToday();
+  tv.lastSeeTaskFunc = () => seeTasksByToday(fm, tv);
 }
 
 function seeTasksByCompleted(fm, tv) {

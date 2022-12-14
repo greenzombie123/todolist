@@ -27,6 +27,28 @@ export function setOverlay(callback = null) {
   });
 }
 
+export function getOverlay(element = null) {
+  const overlay = document.querySelector(".main-overlay");
+  if (!element) return overlay;
+  overlay.appendChild(element);
+  return overlay;
+}
+
+export function setCustomOverlay(overlay, callback = null) {
+  if (!callback) {
+    overlay.addEventListener("click", (e) => {
+      if (e.target !== overlay) return;
+      toggleOverlay();
+    });
+    return;
+  }
+  overlay.addEventListener("click", (e) => {
+    if (e.target !== overlay) return;
+    callback();
+    toggleOverlay();
+  });
+}
+
 export function toggleOverlay() {
   const overlay = document.querySelector(".main-overlay");
   //*If --hidden class is not present, return true
@@ -42,9 +64,9 @@ export function attachEventHandler(element, handler, event, data) {
   element.addEventListener(event, (e) => handler(e, data));
 }
 
-export function positionModal(ref, pop, x = 0, y = 0) {
+export function positionModal(ref, pop, placement = "bottom", x = 0, y = 0) {
   Popper.createPopper(ref, pop, {
-    placement: "bottom",
+    placement: placement,
     strategy: "fixed",
     modifiers: [
       {

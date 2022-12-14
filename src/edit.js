@@ -45,7 +45,7 @@ export function setEditDateModal(task, datelink) {
   });
 }
 
-function setDateInputValues(task) {
+export function setDateInputValues(task) {
   const date = formatDateForInput(task.date);
   const dateInput = document.querySelector(
     ".main-overlay .task-create__date-input"
@@ -70,14 +70,14 @@ function editDate(taskname) {
   taskRenderer.reRender();
 }
 
-function formatDateForInput(date) {
+export function formatDateForInput(date) {
   const timeString = format(date, "kk':'mm");
   const dateString = format(date, "yyyy'-'MM'-'dd");
 
   return { timeString, dateString };
 }
 
-function formatDateForTask(date, time) {
+export function formatDateForTask(date, time) {
   const day = parseInt(date.slice(8)) || null;
   const hours = parseInt(time.slice(0, 3)) || undefined;
   const minutes = parseInt(time.slice(3)) || undefined;
@@ -87,7 +87,7 @@ function formatDateForTask(date, time) {
   return [day, hours, minutes, month, year];
 }
 
-function createEditDateContainer() {
+export function createEditDateContainer() {
   const overlay = document.querySelector(".main-overlay");
   const string = `
   <div class="editbox">
@@ -127,7 +127,7 @@ export function setEditTagModal(task, tagdiv) {
   });
 }
 
-function createTagList(tags) {
+export function createTagList(tags) {
   const overlay = document.querySelector(".main-overlay");
   const string = `<ul class="task-create__taglist"></ul>`;
 
@@ -161,7 +161,7 @@ function createTagListItems(taskTags, taglist) {
   });
 }
 
-function getTagNames() {
+export function getTagNames() {
   const tagListItems = document.querySelectorAll(
     ".main-overlay .task-create__tag-checkbox"
   );
@@ -193,7 +193,7 @@ export function setEditPriorityModal(task, pri) {
   });
 }
 
-function createPrioritySelection() {
+export function createPrioritySelection() {
   const overlay = document.querySelector(".main-overlay");
   const string = `<select
   name="priority"
@@ -240,7 +240,7 @@ function changeFolder(taskname, foldername) {
   toggleOverlay();
 }
 
-function createFolderSelection(foldername) {
+export function createFolderSelection(foldername) {
   const overlay = document.querySelector(".main-overlay");
   const string = `<select
   name="folder"
@@ -263,7 +263,7 @@ function createFolderSelection(foldername) {
   return folSel;
 }
 
-function createFolderOptions(folderSelection, taskFolderName){
+export function createFolderOptions(folderSelection, taskFolderName){
   const folders = folderManager.getAllFolders();
   folders.forEach((folder) => {
     const option = document.createElement("option");

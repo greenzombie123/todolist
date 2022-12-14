@@ -16,7 +16,6 @@ import { resetModal } from "./helpers";
 
 //TODO Put into its on module
 
-
 //* Task Create
 
 (function () {
@@ -355,15 +354,14 @@ function setCallBackOnFolderSelection() {
 function changeFolder(e) {
   const folderLabel = document.querySelector(".task-create__folder");
   folderLabel.textContent = e.currentTarget.value;
-  setFolder()
+  setFolder();
   hideFolderSelection();
 }
 
-function setFolder(){
+function setFolder() {
   const folderLabel = document.querySelector(".task-create__folder");
-  TaskCreate.setFolder(folderLabel.textContent) 
+  TaskCreate.setFolder(folderLabel.textContent);
 }
-
 
 //* Date
 
@@ -408,12 +406,12 @@ function setDateOnTaskCreate() {
   const datelabel = document.querySelector(".task-create__date");
   const date = TaskCreate.getDate();
   const today = new Date();
-  if (date.getDay() === today.getDay()) {
+  if (date.getDate() === today.getDate()) {
     datelabel.textContent = format(
       date,
       `'Today' ${date.getHours() === 23 && date.getMinutes() === 59 ? "" : "p"}`
     );
-  } else if (date.getDay() !== today) {
+  } else {
     datelabel.textContent = format(
       date,
       `MMM do eee ${
@@ -430,7 +428,7 @@ function revealDateContainer() {
 function hideDateContainer() {
   const dateContainer = document.querySelector(".task-create__date-container");
   dateContainer.classList.toggle("task-create__date-container--hidden");
-  resetModal(dateContainer, true)
+  resetModal(dateContainer, true);
   closeOverlay();
 }
 
