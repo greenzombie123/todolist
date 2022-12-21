@@ -20,7 +20,7 @@ import { createEditModal } from "./stories/editModal/EditModal";
 import FolderModalStories from "./stories/editModal/FolderModal.stories";
 import { Editor } from "./todo";
 
-function createEditModalOverlay() {
+export function createEditModalOverlay() {
   const overlay = document.createElement("div");
   overlay.classList.add("editModal-overlay");
   document.body.appendChild(overlay);

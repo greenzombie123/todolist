@@ -3,6 +3,7 @@ import { taskRenderer, resetTaskView } from "./render";
 import { folderManager, SeeTasks } from "./todo";
 import { createFolderNav } from "./stories/sidemenu/FolderNav";
 import { openFolderOptions } from "./options";
+import "../style.css";
 
 const openbutton = document.querySelector(".header__create-task-button");
 openbutton.addEventListener("click", openCreateTask);
@@ -35,8 +36,8 @@ upcoming.addEventListener("click", () => {
   taskRenderer.renderUpcoming();
 });
 
-const folderOptions = sideMenu.querySelector(".side-menu__option--folder")
-folderOptions.addEventListener("click", ()=>openFolderOptions(folderOptions))
+const folderOptions = sideMenu.querySelector(".side-menu__option--folder");
+folderOptions.addEventListener("click", () => openFolderOptions(folderOptions));
 
 // SeeTasks.seeTag("Stuff")
 // taskRenderer.render()

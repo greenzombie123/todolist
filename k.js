@@ -1,9 +1,7 @@
+function lol({g}){
+  console.log(g);
+}
 
-
- 
-
-  const lol = []
-
-  console.log(!lol.length);
+lol({g:12})
 
  

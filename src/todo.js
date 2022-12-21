@@ -169,20 +169,39 @@ class FolderManager {
         3,
         [new Tag("Work", "green")]
       ),
-      new Task("Buy new towel", "Oh yeah!", new Date(2022, 11, 15, 8, 10), null, 2, [
-        new Tag("Stuff", "blue"),
-      ]),
+      new Task(
+        "Buy new towel",
+        "Oh yeah!",
+        new Date(2022, 11, 15, 8, 10),
+        null,
+        2,
+        [new Tag("Stuff", "blue")]
+      )
     );
     this.folders.push(
       new Folder("Private", "green"),
       new Folder("Hobby", "purple")
     );
-    this.folders[0].tasks.push(new Task("Buy shoes", null, new Date(2022, 11, 17, 17, 43), "Private", 1, [
-      new Tag("Stuff", "blue"),
-    ])),
-    this.folders[1].tasks.push(new Task("Eat pasta", "Do it!", new Date(2022, 11, 15, 21, 2), "Hobby", 4, [
-      new Tag("School", "yellow"),
-    ]))
+    this.folders[0].tasks.push(
+      new Task(
+        "Buy shoes",
+        null,
+        new Date(2022, 11, 17, 17, 43),
+        "Private",
+        1,
+        [new Tag("Stuff", "blue")]
+      )
+    ),
+      this.folders[1].tasks.push(
+        new Task(
+          "Eat pasta",
+          "Do it!",
+          new Date(2022, 11, 15, 21, 2),
+          "Hobby",
+          4,
+          [new Tag("School", "yellow")]
+        )
+      );
   }
   //Place in folder
   insertTaskToFolder = (task) => {
@@ -466,7 +485,7 @@ class Editor {
     );
     emitter.emit("rerender");
   }
-  
+
   editDate(taskName, tv, day, hours, minutes, month, year) {
     const task = tv.getCurrentTask(taskName);
 
@@ -499,9 +518,9 @@ class Editor {
     }
   }
 
-  removeAllTags(taskName, tv){
+  removeAllTags(taskName, tv) {
     const task = tv.getCurrentTask(taskName);
-    task.tags = []
+    task.tags = [];
     console.log(task.tags);
   }
 }
@@ -515,7 +534,7 @@ function createFolder(name, color, fm, cm) {
   }
 }
 
-function editFolder(name, newName, newColor, fm, cs) {
+function editFolder(name, newName, newColor, fm, cs, tv) {
   const isThere = fm.checkName(name);
   if (isThere && name !== "Inbox" && newName !== "Inbox") {
     const folder = fm.getFolder(name);
@@ -524,11 +543,15 @@ function editFolder(name, newName, newColor, fm, cs) {
     if (newName === name) {
       folder.color = !sameColor ? newColor : folder.color;
     } else {
+      const oldName = folder.name;
       folder.tasks.forEach((task) => (task.folder = newName));
       folder.name = newName;
       folder.color = !sameColor ? newColor : folder.color;
-      emitter.emit("rerender");
+      if (tv.currentName === oldName) {
+        tv.lastSeeTaskFunc = () => seeTaskByFolder(newName, fm, tv);
+      }
     }
+    emitter.emit("rerender");
   }
 }
 
@@ -568,7 +591,7 @@ function deleteTag(name, tm, fm) {
   }
 }
 
-function editTag(name, newName, newColor, tm, fm, cs) {
+function editTag(name, newName, newColor, tm, fm, cs, tv) {
   const isThere = tm.checkTag(name);
   if (isThere) {
     const tag = tm.getTag(name);
@@ -581,13 +604,16 @@ function editTag(name, newName, newColor, tm, fm, cs) {
     allTasks.forEach((task) =>
       task.tags.forEach((tag) => {
         if (tag.name === name) {
-          tag.name = newName;
+          tag.name = newName || name;
           tag.color = newColor;
         }
       })
     );
-    tag.name = newName;
+    tag.name = newName || name;
     tag.color = newColor;
+    if (tv.currentName === name) {
+      tv.lastSeeTaskFunc = () => seeTasksbyTag(newName, fm, tm, tv);
+    }
     emitter.emit("rerender", { newName });
   }
 }
@@ -716,6 +742,7 @@ export const TaskActions = (function () {
 export const FolderActions = (function () {
   const fm = folderManager;
   const cs = colorManager;
+  const tv = taskViewer;
 
   const createNewFolder = function (name, color) {
     createFolder(name, color, fm, cs);
@@ -724,7 +751,7 @@ export const FolderActions = (function () {
     deleteFolder(name, fm);
   };
   const editAFolder = function (name, newName, color) {
-    editFolder(name, newName, color, fm, cs);
+    editFolder(name, newName, color, fm, cs, tv);
   };
 
   return { createNewFolder, deleteAFolder, editAFolder };
@@ -733,12 +760,13 @@ export const TagActions = (function () {
   const fm = folderManager;
   const tm = tagManager;
   const cs = colorManager;
+  const tv = taskViewer;
 
   const makeNewTag = function (name, color) {
     createTag(name, color, cs, tm);
   };
   const editATag = function (name, newName, newColor) {
-    editTag(name, newName, newColor, tm, fm, cs);
+    editTag(name, newName, newColor, tm, fm, cs, tv);
   };
   const deleteATag = function (name) {
     deleteTag(name, tm, fm);
@@ -764,7 +792,7 @@ const edit = (function () {
     editor.editPriority(taskName, tv, number);
   const changeFolder = (taskName, newFolder) =>
     editor.changeFolder(taskName, newFolder, tv, fm);
-  const removeTags = (taskName) => editor.removeAllTags(taskName, tv)
+  const removeTags = (taskName) => editor.removeAllTags(taskName, tv);
 
   return {
     editTaskName,
@@ -774,7 +802,7 @@ const edit = (function () {
     editTaskDate,
     editTaskPriority,
     changeFolder,
-    removeTags
+    removeTags,
   };
 })();
 //export { createTask as CreateTask };

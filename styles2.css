@@ -1,0 +1,19 @@
+.confirmBox{
+    border: 1px solid black;
+    width: 400px;
+    height: 200px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 3px 3px 8px black;
+    border-radius: 4px;
+}
+
+.confirmBox__title{
+    
+}
+
+.confirmBox__button{
+    
+}

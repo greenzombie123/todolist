@@ -27,10 +27,17 @@ export function setOverlay(callback = null) {
   });
 }
 
-export function getOverlay(element = null) {
+//Add className to main overlay to change its CSS properties
+export function changeOverlay(className){
+  const overlay = document.querySelector(".main-overlay");
+  overlay.classList.toggle(className)
+}
+
+export function getOverlay(element = null, isNeeded = false) {
   const overlay = document.querySelector(".main-overlay");
   if (!element) return overlay;
   overlay.appendChild(element);
+  if(!isNeeded)return
   return overlay;
 }
 
