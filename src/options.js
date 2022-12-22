@@ -8,6 +8,7 @@ import {
   toggleOverlay,
 } from "./helpers";
 import { resetTaskView, taskRenderer } from "./render";
+import { createConfirmBox } from "./stories/editModal/ConfirmationBox";
 import { createChooseList } from "./stories/sidemenu/ChooseList";
 import { createFolderCreater } from "./stories/sidemenu/FolderCreater";
 import { createFolderNav } from "./stories/sidemenu/FolderNav";
@@ -119,7 +120,7 @@ function openChooseFolderList() {
   toggleOverlay();
 
   const openEditModal = () => {
-    const folder = setFolderForFolderEdit();
+    const folder = getFolderFromList();
     toggleOverlay();
     changeOverlay("main-overlay--center");
     createEditModal(folder);
@@ -146,7 +147,7 @@ function toggleChosen(e) {
   e.target.classList.toggle("chooseList__folder--chosen");
 }
 
-function setFolderForFolderEdit() {
+function getFolderFromList() {
   const chosen = document.querySelector(".chooseList__folder--chosen");
   const folderName = chosen.textContent;
   const folder = folderManager.getFolder(folderName);
@@ -169,8 +170,51 @@ function createEditModal({ name, color }) {
   toggleOverlay();
 }
 
-//* Delete Folder 
+//* Delete Folder
 
-function openFolderDelete(){
-  
+function openFolderDelete() {
+  toggleOverlay();
+
+  const chooseList = createChooseList({
+    openEditModal:openConfirmationBox,
+    chooseItem: toggleChosen,
+    change: true,
+    headingText:"Choose a folder to delete.",
+    buttonText:"Delete"
+  });
+  getOverlay(chooseList);
+  changeOverlay("main-overlay--center");
+  setOverlay(() => changeOverlay("main-overlay--center"));
+  toggleOverlay();
+}
+
+function openConfirmationBox() {
+  const folder = getFolderFromList();
+  const args = {
+    headingText: "Do you want to delete this folder?",
+    onClickYes: () => deleteFolder(folder),
+    onClickNo: () => cancelConBox(),
+    chosenText:folder.name
+  };
+  const confirmBox = createConfirmBox(args);
+  toggleOverlay();
+  // changeOverlay("main-overlay--center");
+  getOverlay(confirmBox)
+  setOverlay(() => changeOverlay("main-overlay--center"));
+  toggleOverlay();
+}
+
+
+function deleteFolder({ name }) {
+  //TODO Inplement a better alternative
+  FolderActions.deleteAFolder(name);
+  toggleOverlay();
+  changeOverlay("main-overlay--center")
+  changeFolderNav()
+  taskRenderer.reRender()
+}
+
+function cancelConBox() {
+  toggleOverlay();
+  changeOverlay("main-overlay--center")
 }

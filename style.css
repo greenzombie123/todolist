@@ -1011,7 +1011,7 @@ body {
   background-color: red;
 }
 .createmodal__color-item--yellow {
-  background-color: var(--yellow);
+  background-color: yellow;
 }
 .createmodal__color-item--blue {
   background-color: blue;

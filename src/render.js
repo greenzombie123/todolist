@@ -20,6 +20,11 @@ import format from "date-fns/format";
 import { createEditModalOverlay, setEditModal } from "./editmodal";
 
 function render() {
+  if (taskViewer.currentTasks.length === 0 && taskViewer.currentName === "") {
+    renderNothing();
+    taskRenderer.setLastFunction(renderNothing);
+    return;
+  }
   resetTaskView();
   const currentTasks = taskViewer.currentTasks;
   let currentName = document.querySelector(".taskview__name");
@@ -27,6 +32,10 @@ function render() {
   createTaskBars(currentTasks);
 
   taskRenderer.setLastFunction(render);
+}
+
+function renderNothing() {
+  resetTaskView(false);
 }
 
 function renderUpcoming() {
@@ -199,5 +208,5 @@ export const taskRenderer = (function () {
     lastfunction = () => callback();
   };
 
-  return { render, renderUpcoming, reRender, setLastFunction };
+  return { render, renderUpcoming, reRender, setLastFunction, renderNothing };
 })();

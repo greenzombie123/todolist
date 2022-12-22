@@ -270,12 +270,22 @@ function seeTasksByInbox(fm, tv) {
 }
 
 function seeTaskByFolder(name, fm, tv) {
+  // if(!fm.checkName(name)){
+  //   seeNothing(tv)
+  //   return;
+  // }
   tv.currentTasks = [];
   const folder = fm.getFolder(name);
   tv.currentTasks = folder.tasks.map((task) => task);
   tv.currentName = folder.name;
   tv.lastSeeTaskFunc = () => seeTaskByFolder(name, fm, tv);
   tv.render();
+}
+
+function seeNothing(tv) {
+  tv.currentName = "";
+  tv.currentTasks = [];
+  tv.lastSeeTaskFunc = () => seeNothing(tv);
 }
 
 function seeTasksbyTag(tagname, fm, tm, tv) {
@@ -555,7 +565,7 @@ function editFolder(name, newName, newColor, fm, cs, tv) {
   }
 }
 
-function deleteFolder(name, fm) {
+function deleteFolder(name, fm, tv) {
   const folder = fm.getFolder(name);
   if (folder && name !== "Inbox") {
     const Inbox = fm.getFolder("Inbox");
@@ -564,6 +574,7 @@ function deleteFolder(name, fm) {
       Inbox.tasks.push(task);
     });
     _.remove(fm.folders, (folder) => folder.name === name);
+    if (tv.currentName === name) tv.lastSeeTaskFunc = () => seeNothing(tv);
     emitter.emit("rerender");
   }
 }
@@ -748,7 +759,7 @@ export const FolderActions = (function () {
     createFolder(name, color, fm, cs);
   };
   const deleteAFolder = function (name) {
-    deleteFolder(name, fm);
+    deleteFolder(name, fm, tv);
   };
   const editAFolder = function (name, newName, color) {
     editFolder(name, newName, color, fm, cs, tv);
