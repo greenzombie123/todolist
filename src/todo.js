@@ -270,10 +270,6 @@ function seeTasksByInbox(fm, tv) {
 }
 
 function seeTaskByFolder(name, fm, tv) {
-  // if(!fm.checkName(name)){
-  //   seeNothing(tv)
-  //   return;
-  // }
   tv.currentTasks = [];
   const folder = fm.getFolder(name);
   tv.currentTasks = folder.tasks.map((task) => task);
@@ -661,8 +657,6 @@ emitter.on("taskCreated", (e) => {
 });
 emitter.on("taskCreated", createTask.reset);
 emitter.on("rerender", (e) => taskViewer.lastSeeTaskFunc(e));
-
-// seeTasksByInbox(folderManager, taskViewer);
 
 export const TaskCreate = (function () {
   const fm = folderManager;

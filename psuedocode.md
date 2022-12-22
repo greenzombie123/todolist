@@ -618,3 +618,59 @@ getUpcomingTasks(){
 
 upcomingCalendar = {}
 renderUpcomingTasks(){}
+
+---
+
+openTagOptions()
+    create TagOption modal
+        send functions for list items as arguments
+    position it next to button
+    toggle overlay
+    put tagoption inside overlay
+    set functions to list items of tagoptions
+    
+
+seeTags()
+    toggle overlay
+    create tagviewer
+        add seeTasksByTag to all list items
+    set seeTags as last function
+
+transformOverlay(element, position object, className, callbackFunc)
+    toggleoverlay()
+    appendToOverlay(element)
+    positionModal(position ojbect)
+    setOverlay(callbackFunc)
+    changeOverlay(className)
+
+openTagList()
+    toggleoverlay()
+    create tagchooselist( )
+    transformoverlay
+
+//setChosen should be in component file
+
+openTagCreateModal()
+    toggleoverlay()
+    create tagcreatemodal
+    transformoverlay
+
+createTag()
+    return ()=>{
+        create tag
+        toggle overlay
+    }
+
+openTagEditModal()
+    getValuesFromTagList()
+    toggleoverlay()
+    create tagcreatemodal
+        pass values
+        pass callback function
+
+editTag()
+    return ()=>{
+        editTag
+        toggleoverlay
+        rerender
+    }

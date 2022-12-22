@@ -68,7 +68,7 @@ function openCreateFolder() {
   toggleOverlay();
 
   const createFolder = () => {
-    const newFolder = getFolderValues();
+    const newFolder = getValuesFromCreateModal();
     //TODO Check Name
     FolderActions.createNewFolder(newFolder.name, newFolder.color);
     toggleOverlay();
@@ -82,7 +82,7 @@ function openCreateFolder() {
   toggleOverlay();
 }
 
-function getFolderValues() {
+export function getValuesFromCreateModal() {
   const folderCreater = document.querySelector(".createmodal");
   const nameInput = folderCreater.querySelector(".createmodal__nameinput");
   const chosenColorItem = folderCreater.querySelector(
@@ -92,12 +92,12 @@ function getFolderValues() {
   return { name: nameInput.value, color: chosenColorItem.dataset.color };
 }
 
-//! Do something at some point
+//TODO Do something at some point
 function checkName(name) {
   const isThere = folderManager.checkName(name);
 }
 
-//! Do something at some point
+//TODO Do something at some point
 function reportError(formControlName, message) {
   const formControl = document.querySelector(formControlName);
   formControl.classList.toggle(`${formControlName}--error`);
@@ -137,7 +137,7 @@ function openChooseFolderList() {
   toggleOverlay();
 }
 
-function toggleChosen(e) {
+export function toggleChosen(e) {
   const listItems = document.querySelectorAll(
     ".chooseList .chooseList__folder"
   );
@@ -156,7 +156,7 @@ function getFolderFromList() {
 
 function createEditModal({ name, color }) {
   const createFolder = () => {
-    const { name: newName, color: newColor } = getFolderValues();
+    const { name: newName, color: newColor } = getValuesFromCreateModal();
     FolderActions.editAFolder(name, newName, newColor);
     toggleOverlay();
     changeOverlay("main-overlay--center");

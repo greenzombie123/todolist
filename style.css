@@ -839,34 +839,6 @@ body {
 .edit-priority__priorityoption {
 }
 
-.tagoptions {
-  position: fixed;
-  left: 4rem;
-  background-color: white;
-  border: 1px solid black;
-  z-index: 2;
-  padding: 11px;
-  border-radius: 10px;
-}
-
-.tagoptions--hidden {
-  display: none;
-}
-
-.tagoptions__items {
-  margin: 8px 0;
-}
-
-.tagoptions__link {
-  text-decoration: none;
-  color: black;
-}
-
-.tagoptions__link:hover {
-  text-decoration: underline;
-  color: blue;
-}
-
 .folderoptions {
   background-color: white;
   border: 1px solid #00000047;
@@ -909,33 +881,6 @@ body {
   border: 1px solid black;
 }
 .folderlist__item {
-  padding: 2px;
-  margin: 3px 0;
-  border: 1px solid black;
-  font-size: 2rem;
-  text-align: center;
-}
-
-.taglist-modal {
-  top: -13rem;
-
-  padding: 2px;
-}
-
-.taglist-modal::backdrop {
-  background-color: transparent;
-}
-
-.taglist {
-  width: 20rem;
-  min-height: 4rem;
-  max-height: 7rem;
-  background-color: white;
-  overflow-y: auto;
-  padding: 20px;
-  border: 1px solid black;
-}
-.taglist__item {
   padding: 2px;
   margin: 3px 0;
   border: 1px solid black;

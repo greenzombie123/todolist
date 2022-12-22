@@ -15,7 +15,6 @@ export const createFolderNav = ({
     listItem.classList.add(listItemName || "side-menu__folder");
     listItem.textContent = name;
     listItem.style.setProperty("--color", color);
-    // listItem.addEventListener('click', ()=>renderFolder(name))
     if (!change)
       listItem.addEventListener("click", () => renderFolder(name));
     else listItem.addEventListener("click", renderFolder);

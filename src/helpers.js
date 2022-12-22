@@ -1,3 +1,5 @@
+import { transform } from "lodash";
+
 export function resetModal(element, deep) {
   const newElement = element.cloneNode(deep);
   element.replaceWith(newElement);
@@ -28,47 +30,30 @@ export function setOverlay(callback = null) {
 }
 
 //Add className to main overlay to change its CSS properties
-export function changeOverlay(className){
+export function changeOverlay(className) {
   const overlay = document.querySelector(".main-overlay");
-  overlay.classList.toggle(className)
+  overlay.classList.toggle(className);
 }
 
 export function getOverlay(element = null, isNeeded = false) {
   const overlay = document.querySelector(".main-overlay");
   if (!element) return overlay;
   overlay.appendChild(element);
-  if(!isNeeded)return
+  if (!isNeeded) return;
   return overlay;
-}
-
-export function setCustomOverlay(overlay, callback = null) {
-  if (!callback) {
-    overlay.addEventListener("click", (e) => {
-      if (e.target !== overlay) return;
-      toggleOverlay();
-    });
-    return;
-  }
-  overlay.addEventListener("click", (e) => {
-    if (e.target !== overlay) return;
-    callback();
-    toggleOverlay();
-  });
 }
 
 export function toggleOverlay() {
   const overlay = document.querySelector(".main-overlay");
   //*If --hidden class is not present, return true
-  const isNotThere = overlay.classList.toggle("main-overlay--hidden");
-  if (isNotThere) resetModal(overlay, false);
+  const isHidden = overlay.classList.toggle("main-overlay--hidden");
+  const isCentered = overlay.classList.contains("main-overlay--center");
+  if (isHidden && isCentered) changeOverlay("main-overlay--center");
+  if (isHidden) resetModal(overlay, false);
 }
 
 export function toggleModal(element, classname) {
   element.classList.toggle(classname + "--hidden");
-}
-
-export function attachEventHandler(element, handler, event, data) {
-  element.addEventListener(event, (e) => handler(e, data));
 }
 
 export function positionModal(ref, pop, placement = "bottom", x = 0, y = 0) {
@@ -84,4 +69,11 @@ export function positionModal(ref, pop, placement = "bottom", x = 0, y = 0) {
       },
     ],
   });
+}
+
+export function transformOverlay({ element, center = true, callback = null}) {
+  toggleOverlay();
+  getOverlay(element);
+  if (center) changeOverlay("main-overlay--center");
+  callback ? setOverlay(callback) : setOverlay()
 }

@@ -1,7 +1,7 @@
-function lol({g}){
-  console.log(g);
+function gop(b,c){
+  console.log((b + c));
 }
 
-lol({g:12})
+j = [1,2,4]
 
- 
+gop(...j)
