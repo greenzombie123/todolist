@@ -214,7 +214,6 @@ function deleteFolder({ name }) {
   taskRenderer.reRender()
 }
 
-function cancelConBox() {
+export function cancelConBox() {
   toggleOverlay();
-  changeOverlay("main-overlay--center")
 }

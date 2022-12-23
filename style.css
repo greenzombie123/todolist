@@ -47,7 +47,7 @@ body {
 .taskview__name {
   font-size: 3rem;
   margin-bottom: 2rem;
-  color:black
+  color: black;
 }
 
 .taskview__day {
@@ -257,6 +257,7 @@ body {
   font-size: 1.6rem;
   color: rgba(55, 54, 54, 0.218);
   transition: color 0.5s;
+  cursor: pointer;
 }
 
 .taskbar__trashbin:hover {
@@ -914,7 +915,6 @@ body {
 }
 
 .createmodal__nameinput::before {
-  
 }
 
 .createmodal__colorlabel {
@@ -1042,7 +1042,7 @@ body {
   overflow: auto;
 }
 
-.chooseList{
+.chooseList {
   display: flex;
   flex-flow: column nowrap;
   border: 1px solid #929292;
@@ -1052,13 +1052,13 @@ body {
   background-color: white;
 }
 
-.chooseList__heading{
+.chooseList__heading {
   font-size: 1.1rem;
   padding-bottom: 5px;
   border-bottom: 1px solid #929292c1;
 }
 
-.chooseList__button{
+.chooseList__button {
   align-self: flex-end;
   font-size: 1rem;
   padding: 2px 6px;
@@ -1090,7 +1090,7 @@ body {
   background-color: var(--color, black);
 }
 
-.chooseList__folder:hover{
+.chooseList__folder:hover {
   background-color: rgba(220, 220, 220, 0.811);
   border-radius: 15px;
 }
@@ -1107,6 +1107,11 @@ body {
   height: 12rem;
   overflow: auto;
   padding-bottom: 1rem;
+}
+
+.tagList--tagViewer {
+  height: auto;
+  padding-bottom: 0;
 }
 
 .tagList__item {
@@ -1129,7 +1134,7 @@ body {
   background-color: var(--color, black);
 }
 
-.tagList__item:hover{
+.tagList__item:hover {
   background-color: rgba(220, 220, 220, 0.811);
   border-radius: 15px;
 }

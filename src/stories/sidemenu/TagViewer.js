@@ -11,7 +11,7 @@ export const createTagViewer = function ({ renderTasksByTag }) {
   );
 
   const tagList = document.createElement("ul");
-  tagList.classList.add("tagList");
+  tagList.classList.add("tagList", "tagList--tagViewer");
 
   const tags = tagManager.getAllTags();
 

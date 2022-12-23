@@ -125,20 +125,17 @@ function createTaskBars(tasks, id = { counter: 1 }) {
     );
     setEditFolderModal(task, editFolder);
 
+    const checkBox = document.querySelector(
+      `div[data-id='${id.counter}'] .taskbar__checkbox`
+    );
+    checkBox.addEventListener('change', ()=>completeTask(task))
+
+    const trashBin = document.querySelector(`div[data-id='${id.counter}'] .taskbar__trashbin`);
+    trashBin.addEventListener("click", ()=>deleteTask(task))
+
     id.counter++;
   });
 }
-
-// function resetTaskView() {
-//   const taskview = document.querySelector(".taskview");
-//   const newTV = taskview.cloneNode(true);
-//   taskview.replaceWith(newTV);
-//   if (newTV.firstElementChild.nextElementSibling) {
-//     while (newTV.firstElementChild.nextElementSibling) {
-//       newTV.removeChild(newTV.firstElementChild.nextElementSibling);
-//     }
-//   }
-// }
 
 export function resetTaskView(needHeading = true) {
   const taskview = document.querySelector(".taskview");
@@ -210,3 +207,13 @@ export const taskRenderer = (function () {
 
   return { render, renderUpcoming, reRender, setLastFunction, renderNothing };
 })();
+
+function completeTask({name}){
+  TaskActions.completeATask(name)
+  taskRenderer.reRender()
+}
+
+function deleteTask({name}){
+  TaskActions.deleteATask(name)
+  taskRenderer.reRender()
+}

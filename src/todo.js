@@ -299,7 +299,6 @@ function seeTasksbyTag(tagname, fm, tm, tv) {
   );
   tv.currentName = tagname;
   tv.lastSeeTaskFunc = (e) => {
-    if (e) if (e.newName) tagname = e.newName;
     seeTasksbyTag(tagname, fm, tm, tv);
   };
   tv.render();
@@ -584,7 +583,7 @@ function createTag(name, color, cs, tm) {
   }
 }
 
-function deleteTag(name, tm, fm) {
+function deleteTag(name, tm, fm, tv) {
   const isThere = tm.checkTag(name);
   if (isThere) {
     const allFolders = fm.getAllFolders();
@@ -594,6 +593,7 @@ function deleteTag(name, tm, fm) {
       })
     );
     _.remove(tm.tags, (tag) => tag.name === name);
+    if (tv.currentName === name) tv.lastSeeTaskFunc = () => seeNothing(tv);
     emitter.emit("rerender");
   }
 }
@@ -611,12 +611,12 @@ function editTag(name, newName, newColor, tm, fm, cs, tv) {
     allTasks.forEach((task) =>
       task.tags.forEach((tag) => {
         if (tag.name === name) {
-          tag.name = newName || name;
+          tag.name = newName;
           tag.color = newColor;
         }
       })
     );
-    tag.name = newName || name;
+    tag.name = newName;
     tag.color = newColor;
     if (tv.currentName === name) {
       tv.lastSeeTaskFunc = () => seeTasksbyTag(newName, fm, tm, tv);
@@ -632,6 +632,7 @@ function completeTask(name, fm, tv) {
   task.folder = "Completed";
   _.remove(folder.tasks, (task) => task.name === name);
   fm.completed.tasks.push(task);
+  console.log(fm.completed.tasks);
   emitter.emit("rerender");
 }
 
@@ -774,7 +775,7 @@ export const TagActions = (function () {
     editTag(name, newName, newColor, tm, fm, cs, tv);
   };
   const deleteATag = function (name) {
-    deleteTag(name, tm, fm);
+    deleteTag(name, tm, fm, tv);
   };
 
   return { makeNewTag, editATag, deleteATag };
