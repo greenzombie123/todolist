@@ -15,7 +15,6 @@ export const createEditModal = ({
   folderName = "Inbox",
   priority = 3,
 }) => {
-  // const { openDate, openFolder, openPriority, openTag } = callbacks;
 
   const string = `<form action="" class="task-create__form">
       <div class="task-create__top">

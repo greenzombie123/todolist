@@ -1,6 +1,7 @@
 import _ from "lodash";
 import mitt from "mitt";
 import { format } from "date-fns";
+// import Fuse from 'fuse.js'
 
 const emitter = new mitt();
 
@@ -229,6 +230,15 @@ class FolderManager {
     const folders = this.getAllFolders();
     return folders.some((folder) => folder.name == name);
   }
+
+  getAllTasks() {
+    const allTasks = [];
+    const allFolders = this.getAllFolders();
+    allFolders.forEach((folder) =>
+      folder.tasks.forEach((task) => allTasks.push(task))
+    );
+    return allTasks;
+  }
 }
 
 class TagManager {
@@ -373,7 +383,23 @@ function seeTasksByIncoming(fm, tv) {
   tv.renderUpcoming();
 }
 
-function seeTasksBySearch() {}
+const options = {
+  threshold: 0.4,
+  keys: ["name"],
+};
+
+function seeTasksBySearch(pattern, fm, tv) {
+  const allTasks = fm.getAllTasks();
+  const fuse = new Fuse(allTasks, options);
+  const results = fuse.search(pattern);
+
+  tv.currentTasks = results.map((result) => result.item);
+  tv.currentName = "Search";
+  tv.lastSeeTaskFunc = () => {
+    //if()
+    seeTasksBySearch(pattern, fm, tv);
+  };
+}
 
 class TaskViewer {
   currentName;
@@ -659,6 +685,8 @@ emitter.on("taskCreated", (e) => {
 emitter.on("taskCreated", createTask.reset);
 emitter.on("rerender", (e) => taskViewer.lastSeeTaskFunc(e));
 
+// seeTasksBySearch("Buy", folderManager)
+
 export const TaskCreate = (function () {
   const fm = folderManager;
   const tm = tagManager;
@@ -714,6 +742,9 @@ export const SeeTasks = (function () {
   const seeCompleted = function () {
     seeTasksByCompleted(fm, tv);
   };
+  const seeSearch = function (pattern) {
+    seeTasksBySearch(pattern, fm, tv);
+  };
 
   return {
     seeFolder,
@@ -723,6 +754,7 @@ export const SeeTasks = (function () {
     seeUpcoming,
     seeTag,
     seeCompleted,
+    seeSearch,
   };
 })();
 export const TaskActions = (function () {

@@ -12,19 +12,17 @@ import {
 } from "./todo";
 import { taskRenderer } from "./render";
 import format from "date-fns/format";
-import { resetModal } from "./helpers";
-
-//TODO Put into its on module
+import { resetModal, toggleOverlay, transformOverlay } from "./helpers";
 
 //* Task Create
 
-(function () {
-  const createbutton = document.querySelector(".task-create__create-button");
-  createbutton.addEventListener("click", createNewTask);
-})();
+export function openTaskCreateModal() {
+  const taskCreate = createTaskCreateModal();
+}
 
 export function openCreateTask() {
   const createTask = document.querySelector(".task-create");
+  console.log(12);
   setDate();
   setPriority();
   setFolder();
@@ -32,10 +30,8 @@ export function openCreateTask() {
   createTask.showModal();
 }
 
-function closeCreateTask() {
-  const createTask = document.querySelector(".task-create");
-
-  createTask.close();
+function closeCreateTask(){
+  toggleOverlay()
 }
 
 function createNewTask() {
@@ -73,23 +69,16 @@ function resetTaskCreate() {
   priority.textContent = 4;
 }
 
-function checkName(name) {
-  const folders = folderManager.getAllFolders();
-  let tasks = folders.map((folder) => folder.tasks.forEach((task) => task));
+// function checkName(name) {
+//   const folders = folderManager.getAllFolders();
+//   let tasks = folders.map((folder) => folder.tasks.forEach((task) => task));
 
-  const hasName = tasks.some((task) => task.name === name);
+//   const hasName = tasks.some((task) => task.name === name);
 
-  return hasName;
-}
+//   return hasName;
+// }
 
 //* Task Create
-
-(function () {
-  const nameInput = document.querySelector(".task-create__name");
-  const descriptInput = document.querySelector(".task-create__descript");
-  nameInput.addEventListener("input", setName);
-  descriptInput.addEventListener("input", setDescript);
-})();
 
 function setName(e) {
   TaskCreate.setName(e.currentTarget.value);
@@ -100,9 +89,6 @@ function setDescript(e) {
 }
 
 //* Tags
-
-const tagbutton = document.querySelector(".task-create__tag-button");
-tagbutton.addEventListener("click", openTaskCreate_TagList);
 
 function openTaskCreate_TagList() {
   fillTaskCreate_TagList();
@@ -224,10 +210,6 @@ function closeTaskCreate_TagList() {
 
 //* Priority
 
-const priorityButton = document.querySelector(".task-create__priority-button");
-priorityButton.addEventListener("click", openPrioritySelection);
-setCallBackOnPriSel();
-
 function revealPrioritySelection() {
   const priSel = document.querySelector(".task-create__priority-selection");
   priSel.classList.toggle("task-create__priority-selection--hidden");
@@ -278,17 +260,12 @@ function setPriority() {
   TaskCreate.setPriority(parseInt(priorityLabel.textContent));
 }
 
-// function setPriority
-
 function resetOverlay() {
   const overlay = document.querySelector(".overlay");
   overlay.replaceWith(overlay.cloneNode(false));
 }
 
 //* Folder
-
-const folderbutton = document.querySelector(".task-create__folder-button");
-folderbutton.addEventListener("click", openFolderSelection);
 
 function openFolderSelection() {
   cleanupListOfEventListeners(".task-create__folder-selection");
@@ -365,14 +342,6 @@ function setFolder() {
 
 //* Date
 
-const dateInput = document.querySelector(".task-create__date-input");
-const timeInput = document.querySelector(".task-create__time-input");
-dateInput.addEventListener("change", setDate);
-timeInput.addEventListener("change", setDate);
-
-const datebutton = document.querySelector(".task-create__date-button");
-datebutton.addEventListener("click", openDateContainer);
-
 function openDateContainer() {
   const datebutton = document.querySelector(".task-create__date-button");
   const dateContainer = document.querySelector(".task-create__date-container");
@@ -439,7 +408,6 @@ function formatDate(date, time) {
   const month = parseInt(date.slice(5, 7)) || null;
   const year = parseInt(date.slice(0, 4)) || null;
 
-  // console.log([day, hours, minutes, period, month, year]);
   return [day, hours, minutes, month, year];
 }
 
@@ -449,3 +417,145 @@ function resetDeadline() {
   dateInput.value = "";
   timeInput.value = "";
 }
+
+//* Refactored
+
+const createTaskCreateModal = () => {
+  const taskCreate = document.createElement("div");
+  taskCreate.classList.add("task-create");
+  const string = `
+  <div class="overlay overlay--hidden"></div>
+  <form action="" class="task-create__form">
+    <div class="task-create__top">
+      <label for="name" id="name" class="task-create__name-label"
+        >Name</label
+      >
+      <button class="task-create__cancel-button">X</button>
+    </div>
+
+    <input required type="text" name="name" class="task-create__name" />
+    <label for="descript" class="task-create__descript-label"
+      >Description</label
+    >
+    <input
+      name="descript"
+      type="text" id="descript"
+      class="task-create__descript"
+    ></input>
+
+    <div class="task-create__bottom">
+      <button type="button" class="task-create__date-button">Deadline</button>
+
+      <button type="button" class="task-create__tag-button">Tags</button>
+
+      <button type="button" class="task-create__priority-button">Priority</button>
+
+      <button type="button" class="task-create__folder-button">Folder</button>
+
+      <span class="task-create__date">Today</span>
+
+      <div class="task-create__tagcontainer">
+        <span class="task-create__tag"
+          >Add A Tag</span
+        >
+      </div>
+
+      <span class="task-create__priority">4</span>
+
+      <span class="task-create__folder">Inbox</span>
+
+    </div>
+
+    <button type="button" class="task-create__create-button">Create</button>
+    <div class="poppers">
+      <div
+        class="task-create__date-container task-create__date-container--hidden"
+      >
+        <label class="task-create__date-container__date-label" for="date"
+          >Deadline</label
+        >
+        <label class="task-create__date-container__time-label" for="time"
+          >Time</label
+        >
+        <input type="date" name="date" class="task-create__date-input" />
+
+        <input
+          type="time"
+          name="time"
+          class="task-create__time-input"
+        />
+    </div>
+      <ul class="task-create__taglist task-create__taglist--hidden">
+        <li
+          class="task-create__tag-listitem task-create__tag-listitem--green"
+        >
+          <label for="" class="task-create__tagname">Work</label
+          ><input
+            type="checkbox"
+            name="tagname"
+            id="tagname"
+            class="task-create__tag-checkbox"
+            value="work"
+          />
+        </li>
+      </ul>
+      <select
+        name="priority"
+        id="priority"
+        class="task-create__priority-selection task-create__priority-selection--hidden"
+      >
+        <option value="1" class="task-create__priorityoption">1</option>
+        <option value="2" class="task-create__priorityoption">2</option>
+        <option value="3" class="task-create__priorityoption">3</option>
+        <option value="4" class="task-create__priorityoption">4</option>
+      </select>
+      <select
+        name="folder"
+        id="folder"
+        class="task-create__folder-selection task-create__folder-selection--hidden"
+      >
+        <option value="Inbox" class="task-create__folderoption">
+          Inbox
+        </option>
+      </select>
+    </div>
+  </form>`;
+
+  taskCreate.insertAdjacentHTML("afterbegin", string);
+  transformOverlay({element:taskCreate, center:true})
+  setDate();
+  setPriority();
+  setFolder();
+
+  const createbutton = document.querySelector(".task-create__create-button");
+  createbutton.addEventListener("click", createNewTask);
+
+  const nameInput = document.querySelector(".task-create__name");
+  const descriptInput = document.querySelector(".task-create__descript");
+  nameInput.addEventListener("input", setName);
+  descriptInput.addEventListener("input", setDescript);
+
+  const tagbutton = document.querySelector(".task-create__tag-button");
+  tagbutton.addEventListener("click", openTaskCreate_TagList);
+
+  const priorityButton = document.querySelector(
+    ".task-create__priority-button"
+  );
+  priorityButton.addEventListener("click", openPrioritySelection);
+
+  const priSel = document.querySelector(".task-create__priority-selection");
+  priSel.addEventListener("click", changePriority);
+
+  const folderbutton = document.querySelector(".task-create__folder-button");
+  folderbutton.addEventListener("click", openFolderSelection);
+
+  const dateInput = document.querySelector(".task-create__date-input");
+  const timeInput = document.querySelector(".task-create__time-input");
+  dateInput.addEventListener("change", setDate);
+  timeInput.addEventListener("change", setDate);
+
+  const datebutton = document.querySelector(".task-create__date-button");
+  datebutton.addEventListener("click", openDateContainer);
+
+  return taskCreate
+};
