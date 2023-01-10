@@ -1,6 +1,6 @@
 import _ from "lodash";
 import mitt from "mitt";
-import { format } from "date-fns";
+import { compareDesc, format, isSameDay } from "date-fns";
 // import Fuse from 'fuse.js'
 
 const emitter = new mitt();
@@ -158,14 +158,14 @@ class FolderManager {
     this.inbox = new Folder("Inbox", "black");
     this.completed = new Folder("Completed", "black");
     this.inbox.tasks.push(
-      new Task("Do laundry", null, new Date(2022, 11, 7, 9, 12), "Inbox", 1, [
+      new Task("Do laundry", null, new Date(2023, 0, 12, 9, 12), "Inbox", 1, [
         new Tag("Work", "green"),
         new Tag("School", "yellow"),
       ]),
       new Task(
         "Pay bills",
         "Go to Walgreens",
-        new Date(2022, 11, 13, 11, 2),
+        new Date(2023, 0, 13, 11, 2),
         "Inbox",
         3,
         [new Tag("Work", "green")]
@@ -173,7 +173,7 @@ class FolderManager {
       new Task(
         "Buy new towel",
         "Oh yeah!",
-        new Date(2022, 11, 15, 8, 10),
+        new Date(2023, 0, 10, 8, 10),
         null,
         2,
         [new Tag("Stuff", "blue")]
@@ -184,14 +184,9 @@ class FolderManager {
       new Folder("Hobby", "purple")
     );
     this.folders[0].tasks.push(
-      new Task(
-        "Buy shoes",
-        null,
-        new Date(2022, 11, 17, 17, 43),
-        "Private",
-        1,
-        [new Tag("Stuff", "blue")]
-      )
+      new Task("Buy shoes", null, new Date(2023, 0, 14, 17, 43), "Private", 1, [
+        new Tag("Stuff", "blue"),
+      ])
     ),
       this.folders[1].tasks.push(
         new Task(
@@ -203,6 +198,19 @@ class FolderManager {
           [new Tag("School", "yellow")]
         )
       );
+
+    const num = 15;
+    for (let index = 0; index < num; index++) {
+      const task = new Task(
+        "Do things",
+        null,
+        new Date(2023, 0, 14 + index),
+        "Inbox",
+        4,
+        [new Tag("Stuff", "blue")]
+      );
+      this.inbox.tasks.push(task);
+    }
   }
   //Place in folder
   insertTaskToFolder = (task) => {
@@ -367,9 +375,8 @@ function seeTasksByIncoming(fm, tv) {
     const day = date.getDate();
     date.setDate(day + index + 1);
     upcomingDays[format(date, "iiii")] = [];
-    const tasks = allTasks.filter(
-      (task) => task.date.getDate() === date.getDate()
-    );
+    //If isSameDay() returns true, task's date and date of upcoming day is the same
+    const tasks = allTasks.filter((task) => isSameDay(task.date, date));
     tasks.forEach((task) => tv.currentTasks.push(task));
     upcomingDays[format(date, "iiii")] = tasks;
   }

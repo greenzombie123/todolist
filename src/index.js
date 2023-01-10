@@ -5,6 +5,7 @@ import { createFolderNav } from "./stories/sidemenu/FolderNav";
 import { openFolderOptions } from "./folderoptions";
 import "../style.css";
 import { openTagOptions } from "./tagoptions";
+import "./IDB";
 
 const openbutton = document.querySelector(".header__create-task-button");
 // openbutton.addEventListener("click", openCreateTask);
